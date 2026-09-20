@@ -1,0 +1,132 @@
+class RescueTeam {
+
+private:
+
+    int teamID;
+    string teamName;
+    string location;
+    bool available;
+
+public:
+
+    RescueTeam(int id, string name, string loc) {
+
+        teamID = id;
+        teamName = name;
+        location = loc;
+        available = true;
+    }
+
+    int getID() const {
+        return teamID;
+    }
+
+    string getName() const {
+        return teamName;
+    }
+
+    string getLocation() const {
+        return location;
+    }
+
+    bool isAvailable() const {
+        return available;
+    }
+
+    void assignTeam() {
+
+        available = false;
+    }
+
+    void makeAvailable() {
+
+        available = true;
+    }
+
+    void display() const {
+
+        cout << "\n----------------------------------";
+        cout << "\nTeam ID   : " << teamID;
+        cout << "\nTeam Name : " << teamName;
+        cout << "\nLocation  : " << location;
+        cout << "\nStatus    : "
+             << (available ? "Available" : "Busy");
+        cout << "\n----------------------------------\n";
+    }
+};
+
+
+// ============================================================
+// MODULE 5: SHELTER MANAGEMENT
+// ============================================================
+
+class Shelter {
+
+private:
+
+    int shelterID;
+    string location;
+    int capacity;
+    int occupancy;
+
+public:
+
+    Shelter(int id, string loc, int cap) {
+
+        shelterID = id;
+        location = loc;
+        capacity = cap;
+        occupancy = 0;
+    }
+
+    int getID() const {
+        return shelterID;
+    }
+
+    string getLocation() const {
+        return location;
+    }
+
+    int getCapacity() const {
+        return capacity;
+    }
+
+    int getOccupancy() const {
+        return occupancy;
+    }
+
+    int getAvailableSpace() const {
+
+        return capacity - occupancy;
+    }
+
+    bool hasSpace(int people) const {
+
+        return (occupancy + people <= capacity);
+    }
+
+    void addPeople(int people) {
+
+        if (hasSpace(people)) {
+
+            occupancy += people;
+
+            cout << "\nPeople added to shelter.";
+        }
+        else {
+
+            cout << "\nShelter does not have enough space.";
+        }
+    }
+
+    void display() const {
+
+        cout << "\n----------------------------------";
+        cout << "\nShelter ID     : " << shelterID;
+        cout << "\nLocation       : " << location;
+        cout << "\nTotal Capacity : " << capacity;
+        cout << "\nOccupied       : " << occupancy;
+        cout << "\nAvailable      : " << getAvailableSpace();
+        cout << "\n----------------------------------\n";
+    }
+};
