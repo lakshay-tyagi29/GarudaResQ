@@ -1,0 +1,78 @@
+class Victim {
+private:
+    int victimID;
+    string name;
+    string location;
+    int peopleAffected;
+    int injuryLevel;
+    string disasterType;
+    string requiredResource;
+
+public:
+    Victim() {}
+
+    Victim(int id, string n, string loc, int people,
+           int injury, string disaster, string resource) {
+
+        victimID = id;
+        name = n;
+        location = loc;
+        peopleAffected = people;
+        injuryLevel = injury;
+        disasterType = disaster;
+        requiredResource = resource;
+    }
+
+    int getID() const {
+        return victimID;
+    }
+
+    string getName() const {
+        return name;
+    }
+
+    string getLocation() const {
+        return location;
+    }
+
+    int getPeopleAffected() const {
+        return peopleAffected;
+    }
+
+    int getInjuryLevel() const {
+        return injuryLevel;
+    }
+
+    string getDisasterType() const {
+        return disasterType;
+    }
+
+    string getRequiredResource() const {
+        return requiredResource;
+    }
+
+    // Priority calculation for prototype
+    int calculatePriority() const {
+
+        int priority = (injuryLevel * 10) + peopleAffected;
+
+        if (priority > 100)
+            priority = 100;
+
+        return priority;
+    }
+
+    void display() const {
+
+        cout << "\n----------------------------------------\n";
+        cout << "Victim ID        : " << victimID << endl;
+        cout << "Name             : " << name << endl;
+        cout << "Location         : " << location << endl;
+        cout << "People Affected  : " << peopleAffected << endl;
+        cout << "Injury Level     : " << injuryLevel << "/5" << endl;
+        cout << "Disaster Type    : " << disasterType << endl;
+        cout << "Required Resource: " << requiredResource << endl;
+        cout << "Priority         : " << calculatePriority() << endl;
+        cout << "----------------------------------------\n";
+    }
+};
