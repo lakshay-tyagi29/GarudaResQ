@@ -1,0 +1,568 @@
+class GarudaResQ {
+
+private:
+
+    PriorityManager priorityManager;
+
+    vector<RescueTeam> rescueTeams;
+
+    vector<Shelter> shelters;
+
+    vector<Resource> resources;
+
+    RouteManager routeManager;
+
+
+    int nextRequestID = 1;
+    int nextTeamID = 1;
+    int nextShelterID = 1;
+    int nextResourceID = 1;
+
+
+public:
+
+    void reportEmergency() {
+
+        int victimID;
+        string name;
+        string location;
+        int people;
+        int injury;
+        string disaster;
+        string resource;
+
+
+        cout << "\n========== REPORT EMERGENCY ==========\n";
+
+
+        cout << "Enter Victim ID: ";
+        cin >> victimID;
+
+        cin.ignore();
+
+
+        cout << "Enter Name: ";
+        getline(cin, name);
+
+
+        cout << "Enter Current Location: ";
+        getline(cin, location);
+
+
+        cout << "Enter Number of People Affected: ";
+        cin >> people;
+
+
+        do {
+
+            cout << "Enter Injury Level (1-5): ";
+            cin >> injury;
+
+            if (injury < 1 || injury > 5)
+                cout << "Please enter a value between 1 and 5.\n";
+
+        } while (injury < 1 || injury > 5);
+
+
+        cin.ignore();
+
+
+        cout << "Enter Disaster Type: ";
+        getline(cin, disaster);
+
+
+        cout << "Enter Required Resource: ";
+        getline(cin, resource);
+
+
+        Victim victim(
+            victimID,
+            name,
+            location,
+            people,
+            injury,
+            disaster,
+            resource
+        );
+
+
+        EmergencyRequest request(
+            nextRequestID++,
+            victim
+        );
+
+
+        priorityManager.addEmergency(request);
+    }
+
+    void viewEmergencies() {
+
+        priorityManager.displayQueue();
+    }
+
+
+    void processEmergency() {
+
+        priorityManager.processHighestPriority();
+    }
+
+
+    void registerRescueTeam() {
+
+        string name;
+        string location;
+
+
+        cin.ignore();
+
+
+        cout << "\n========== REGISTER RESCUE TEAM ==========\n";
+
+
+        cout << "Enter Team Name: ";
+        getline(cin, name);
+
+
+        cout << "Enter Team Location: ";
+        getline(cin, location);
+
+
+        RescueTeam team(
+            nextTeamID++,
+            name,
+            location
+        );
+
+
+        rescueTeams.push_back(team);
+
+
+        cout << "\nRescue team registered successfully.\n";
+    }
+
+
+    void viewRescueTeams() {
+
+        if (rescueTeams.empty()) {
+
+            cout << "\nNo rescue teams registered.\n";
+            return;
+        }
+
+
+        cout << "\n========== RESCUE TEAMS ==========\n";
+
+
+        for (auto &team : rescueTeams) {
+
+            team.display();
+        }
+    }
+
+    void addShelter() {
+
+        string location;
+        int capacity;
+
+
+        cin.ignore();
+
+
+        cout << "\n========== ADD SHELTER ==========\n";
+
+
+        cout << "Enter Shelter Location: ";
+        getline(cin, location);
+
+
+        cout << "Enter Shelter Capacity: ";
+        cin >> capacity;
+
+
+        Shelter shelter(
+            nextShelterID++,
+            location,
+            capacity
+        );
+
+
+        shelters.push_back(shelter);
+
+
+        cout << "\nShelter added successfully.\n";
+    }
+
+
+    void viewShelters() {
+
+        if (shelters.empty()) {
+
+            cout << "\nNo shelters available.\n";
+            return;
+        }
+
+
+        cout << "\n========== SHELTERS ==========\n";
+
+
+        for (auto &shelter : shelters) {
+
+            shelter.display();
+        }
+    }
+
+
+    void findShelter() {
+
+        int people;
+
+
+        cout << "\nEnter number of people requiring shelter: ";
+        cin >> people;
+
+
+        bool found = false;
+
+
+        cout << "\n========== AVAILABLE SHELTERS ==========\n";
+
+
+        for (auto &shelter : shelters) {
+
+            if (shelter.hasSpace(people)) {
+
+                shelter.display();
+
+                found = true;
+            }
+        }
+
+
+        if (!found) {
+
+            cout << "\nNo shelter has enough available space.\n";
+        }
+    }
+
+    void allocateShelter() {
+
+        int shelterID;
+        int people;
+
+
+        cout << "\nEnter Shelter ID: ";
+        cin >> shelterID;
+
+
+        cout << "Enter Number of People: ";
+        cin >> people;
+
+
+        for (auto &shelter : shelters) {
+
+            if (shelter.getID() == shelterID) {
+
+                shelter.addPeople(people);
+
+                return;
+            }
+        }
+
+
+        cout << "\nShelter not found.\n";
+    }
+
+    void addResource() {
+
+        string name;
+        int quantity;
+
+
+        cin.ignore();
+
+
+        cout << "\n========== ADD RESOURCE ==========\n";
+
+
+        cout << "Enter Resource Name: ";
+        getline(cin, name);
+
+
+        cout << "Enter Quantity: ";
+        cin >> quantity;
+
+
+        Resource resource(
+            nextResourceID++,
+            name,
+            quantity
+        );
+
+
+        resources.push_back(resource);
+
+
+        cout << "\nResource added successfully.\n";
+    }
+
+    void viewResources() {
+
+        if (resources.empty()) {
+
+            cout << "\nNo resources available.\n";
+            return;
+        }
+
+
+        cout << "\n========== RESOURCES ==========\n";
+
+
+        for (auto &resource : resources) {
+
+            resource.display();
+        }
+    }
+
+    void distributeResource() {
+
+        int resourceID;
+        int amount;
+
+
+        cout << "\nEnter Resource ID: ";
+        cin >> resourceID;
+
+
+        cout << "Enter Quantity to Distribute: ";
+        cin >> amount;
+
+
+        for (auto &resource : resources) {
+
+            if (resource.getID() == resourceID) {
+
+                resource.distribute(amount);
+
+                return;
+            }
+        }
+
+
+        cout << "\nResource not found.\n";
+    }
+
+    void addRoad() {
+
+        string source;
+        string destination;
+        int distance;
+
+
+        cin.ignore();
+
+
+        cout << "\n========== ADD ROAD ==========\n";
+
+
+        cout << "Enter Source Location: ";
+        getline(cin, source);
+
+
+        cout << "Enter Destination Location: ";
+        getline(cin, destination);
+
+
+        cout << "Enter Distance (km): ";
+        cin >> distance;
+
+
+        routeManager.addRoad(
+            source,
+            destination,
+            distance
+        );
+    }
+
+
+    void findRoute() {
+
+        string source;
+        string destination;
+
+
+        cin.ignore();
+
+
+        cout << "\n========== FIND ROUTE ==========\n";
+
+
+        cout << "Enter Starting Location: ";
+        getline(cin, source);
+
+
+        cout << "Enter Destination: ";
+        getline(cin, destination);
+
+
+        routeManager.findShortestRoute(
+            source,
+            destination
+        );
+    }
+
+
+    void viewRoadNetwork() {
+
+        routeManager.displayNetwork();
+    }
+
+    void run() {
+
+        int choice;
+
+
+        do {
+
+            cout << "\n\n";
+            cout << "============================================\n";
+            cout << "        GARUDARESQ - DISASTER RESPONSE      \n";
+            cout << "============================================\n";
+
+            cout << "1.  Report Emergency\n";
+            cout << "2.  View Emergency Requests\n";
+            cout << "3.  Process Highest Priority Emergency\n";
+
+            cout << "--------------------------------------------\n";
+
+            cout << "4.  Register Rescue Team\n";
+            cout << "5.  View Rescue Teams\n";
+
+            cout << "--------------------------------------------\n";
+
+            cout << "6.  Add Shelter\n";
+            cout << "7.  View Shelters\n";
+            cout << "8.  Find Available Shelter\n";
+            cout << "9.  Allocate People to Shelter\n";
+
+            cout << "--------------------------------------------\n";
+
+            cout << "10. Add Resource\n";
+            cout << "11. View Resources\n";
+            cout << "12. Distribute Resource\n";
+
+            cout << "--------------------------------------------\n";
+
+            cout << "13. Add Road to Network\n";
+            cout << "14. Find Shortest Route\n";
+            cout << "15. View Road Network\n";
+
+            cout << "--------------------------------------------\n";
+
+            cout << "0. Exit\n";
+
+            cout << "============================================\n";
+
+            cout << "Enter your choice: ";
+            cin >> choice;
+
+
+            switch (choice) {
+
+                case 1:
+                    reportEmergency();
+                    break;
+
+
+                case 2:
+                    viewEmergencies();
+                    break;
+
+
+                case 3:
+                    processEmergency();
+                    break;
+
+
+                case 4:
+                    registerRescueTeam();
+                    break;
+
+
+                case 5:
+                    viewRescueTeams();
+                    break;
+
+
+                case 6:
+                    addShelter();
+                    break;
+
+
+                case 7:
+                    viewShelters();
+                    break;
+
+
+                case 8:
+                    findShelter();
+                    break;
+
+
+                case 9:
+                    allocateShelter();
+                    break;
+
+
+                case 10:
+                    addResource();
+                    break;
+
+
+                case 11:
+                    viewResources();
+                    break;
+
+
+                case 12:
+                    distributeResource();
+                    break;
+
+
+                case 13:
+                    addRoad();
+                    break;
+
+
+                case 14:
+                    findRoute();
+                    break;
+
+
+                case 15:
+                    viewRoadNetwork();
+                    break;
+
+
+                case 0:
+                    cout << "\nExiting GarudaResQ...\n";
+                    cout << "Stay Safe!\n";
+                    break;
+
+
+                default:
+                    cout << "\nInvalid choice. Please try again.\n";
+            }
+
+
+        } while (choice != 0);
+    }
+};
+
+int main() {
+
+    GarudaResQ system;
+
+    system.run();
+
+    return 0;
+}
