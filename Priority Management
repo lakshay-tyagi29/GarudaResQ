@@ -1,0 +1,90 @@
+class PriorityManager {
+
+private:
+
+    priority_queue<
+        EmergencyRequest,
+        vector<EmergencyRequest>,
+        ComparePriority
+    > emergencyQueue;
+
+public:
+
+    void addEmergency(EmergencyRequest request) {
+
+        emergencyQueue.push(request);
+
+        cout << "\nEmergency added successfully.";
+        cout << "\nPriority assigned: "
+             << request.getPriority() << endl;
+    }
+
+    bool isEmpty() const {
+
+        return emergencyQueue.empty();
+    }
+
+    EmergencyRequest getHighestPriority() {
+
+        return emergencyQueue.top();
+    }
+
+    void processHighestPriority() {
+
+        if (emergencyQueue.empty()) {
+
+            cout << "\nNo pending emergency requests.\n";
+            return;
+        }
+
+        EmergencyRequest request = emergencyQueue.top();
+
+        emergencyQueue.pop();
+
+        cout << "\n===== HIGHEST PRIORITY EMERGENCY =====";
+
+        request.display();
+
+        cout << "\nRescue team should handle this request first.\n";
+    }
+
+    void displayQueue() {
+
+        if (emergencyQueue.empty()) {
+
+            cout << "\nNo pending emergencies.\n";
+            return;
+        }
+
+        priority_queue<
+            EmergencyRequest,
+            vector<EmergencyRequest>,
+            ComparePriority
+        > temp = emergencyQueue;
+
+        cout << "\n========== PRIORITY QUEUE ==========\n";
+
+        while (!temp.empty()) {
+
+            EmergencyRequest request = temp.top();
+
+            cout << "\nRequest ID: "
+                 << request.getRequestID();
+
+            cout << "\nVictim: "
+                 << request.getVictim().getName();
+
+            cout << "\nLocation: "
+                 << request.getVictim().getLocation();
+
+            cout << "\nPriority: "
+                 << request.getPriority();
+
+            cout << "\n-----------------------------------";
+
+            temp.pop();
+        }
+
+        cout << endl;
+    }
+};
