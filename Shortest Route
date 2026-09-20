@@ -1,0 +1,168 @@
+class RouteManager {
+
+private:
+
+
+    unordered_map<
+        string,
+        vector<pair<string, int>>
+    > graph;
+
+public:
+
+    void addRoad(string source,
+                 string destination,
+                 int distance) {
+
+        graph[source].push_back({destination, distance});
+
+        graph[destination].push_back({source, distance});
+
+        cout << "\nRoad added successfully.";
+    }
+
+
+    void displayNetwork() {
+
+        if (graph.empty()) {
+
+            cout << "\nNo roads available.\n";
+            return;
+        }
+
+        cout << "\n========== ROAD NETWORK ==========\n";
+
+        for (auto &node : graph) {
+
+            cout << node.first << " -> ";
+
+            for (auto &edge : node.second) {
+
+                cout << edge.first
+                     << "(" << edge.second << " km) ";
+            }
+
+            cout << endl;
+        }
+    }
+
+
+    void findShortestRoute(string source,
+                           string destination) {
+
+        if (graph.find(source) == graph.end() ||
+            graph.find(destination) == graph.end()) {
+
+            cout << "\nLocation not found in road network.\n";
+            return;
+        }
+
+
+        unordered_map<string, int> distance;
+
+        unordered_map<string, string> previous;
+
+
+        for (auto &node : graph) {
+
+            distance[node.first] =
+                numeric_limits<int>::max();
+        }
+
+
+        priority_queue<
+            pair<int, string>,
+            vector<pair<int, string>>,
+            greater<pair<int, string>>
+        > pq;
+
+
+        distance[source] = 0;
+
+        pq.push({0, source});
+
+
+        while (!pq.empty()) {
+
+            auto current = pq.top();
+
+            pq.pop();
+
+            int currentDistance = current.first;
+
+            string currentNode = current.second;
+
+
+            if (currentDistance >
+                distance[currentNode]) {
+
+                continue;
+            }
+
+
+            for (auto &edge : graph[currentNode]) {
+
+                string nextNode = edge.first;
+
+                int weight = edge.second;
+
+
+                if (distance[currentNode] + weight <
+                    distance[nextNode]) {
+
+                    distance[nextNode] =
+                        distance[currentNode] + weight;
+
+                    previous[nextNode] =
+                        currentNode;
+
+                    pq.push({
+                        distance[nextNode],
+                        nextNode
+                    });
+                }
+            }
+        }
+
+
+        if (distance[destination] ==
+            numeric_limits<int>::max()) {
+
+            cout << "\nNo route available.\n";
+            return;
+        }
+
+
+        vector<string> path;
+
+        string current = destination;
+
+
+        while (current != source) {
+
+            path.push_back(current);
+
+            current = previous[current];
+        }
+
+        path.push_back(source);
+
+
+        reverse(path.begin(), path.end());
+
+
+        cout << "\n========== SHORTEST ROUTE ==========\n";
+
+        for (size_t i = 0; i < path.size(); i++) {
+
+            cout << path[i];
+
+            if (i != path.size() - 1)
+                cout << " -> ";
+        }
+
+        cout << "\nTotal Distance: "
+             << distance[destination]
+             << " km\n";
+    }
+};
