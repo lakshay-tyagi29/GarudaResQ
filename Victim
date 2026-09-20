@@ -50,8 +50,6 @@ public:
     string getRequiredResource() const {
         return requiredResource;
     }
-
-    // Priority calculation for prototype
     int calculatePriority() const {
 
         int priority = (injuryLevel * 10) + peopleAffected;
