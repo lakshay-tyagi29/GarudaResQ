@@ -44,9 +44,6 @@ public:
         victim.display();
     }
 };
-
-
-// Comparator for Priority Queue
 struct ComparePriority {
 
     bool operator()(const EmergencyRequest &a,
