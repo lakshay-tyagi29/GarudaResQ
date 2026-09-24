@@ -48,9 +48,188 @@ nav{
     margin-right:-35px;
     cursor:pointer;
 }
-.links{
+.nav-links{
     display:flex;
     align-items:center;
     gap:30px;
     margin-right:5%;
+}
+.nav-links a {
+    color: white;
+    transition: all 0.15s ease-in-out;
+    display: inline-block; 
+}
+.nav-links a:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+.emergency-bar {
+    background: linear-gradient(90deg, #7f1d1d, #991b1b);
+    color: #fca5a5;
+    text-align: center;
+    padding: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.intro{
+    height:100px;
+    width:100%;
+    margin-top:20px;
+}
+.intro1{
+    display:flex;
+    justify-content:center;
+    font-size:1em;
+}
+.intro2{
+    display:flex;
+    justify-content:center;
+    margin-top:8px;
+    font-size:small;
+}
+.cards{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    gap:30px;
+    margin-top:10px;
+    height:auto;
+}
+.card-title {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.citizen{
+    display:flex;
+    justify-content:center;
+    flex-direction: column; 
+    align-items: center;    
+    padding-top: 30px;     
+    height:450px;
+    width:450px;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-top: 3px solid #6366f1;
+    border-radius:12px;
+    background: rgba(18, 24, 38, 0.75);
+    backdrop-filter: blur(10px);
+}
+.ngo{
+    display:flex;
+    justify-content:center;
+    flex-direction: column; 
+    align-items: center;    
+    padding-top: 30px; 
+    height:450px;
+    width:450px;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-top: 3px solid #f59e0b;
+    border-radius:12px;
+    background: rgba(18, 24, 38, 0.75);
+    backdrop-filter: blur(10px);
+}
+.shelters{
+    display:flex;
+    justify-content:center;
+    flex-direction: column; 
+    align-items: center;    
+    padding-top: 30px; 
+    height:450px;
+    width:450px;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-top: 3px solid #10b981;  
+    border-radius:12px;
+    background: rgba(18, 24, 38, 0.75);
+    backdrop-filter: blur(10px);
+}
+.citizen button{
+    color:#818cf8;
+    background-color: rgba(99, 102, 241, 0.1);
+    border:1px solid rgba(99, 102, 241, 0.3)
+}
+.ngo button{
+    color:#fbbf24;
+    background-color: rgba(245, 158, 11, 0.1);
+    border:1px solid rgba(245, 158, 11, 0.3);
+}
+.shelters button{
+    color:#34d399;
+    background-color: rgba(16, 185, 129, 0.1);
+    border:1px solid rgba(16, 185, 129, 0.3);
+}
+.buttoncards{
+    margin-top: auto;
+    cursor:pointer;
+    margin-bottom:25px;
+    border-radius:15px;
+    height:60px;
+    width:90%;
+    transition: all 0.1s ease-in-out;
+}
+.citizen button:hover {
+    background-color: rgba(99, 102, 241, 0.3) !important;
+    border-color: #818cf8 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    transform: translateY(-2px);
+}
+.ngo button:hover {
+    background-color: rgba(245, 158, 11, 0.3) !important;
+    border-color: #fbbf24 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+    transform: translateY(-2px);
+}
+.shelters button:hover {
+    background-color: rgba(16, 185, 129, 0.3) !important;
+    border-color: #34d399 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+    transform: translateY(-2px);
+}
+.cardlogo{
+    height:150px;
+    justify-self:center;
+    margin-top:-25px;
+    object-fit: contain;
+}
+.citizen img{
+    height:90px;
+    justify-self:center;
+    margin-top:0px;
+    object-fit: contain;
+}
+.card-msg {
+    color: #94a3b8;           
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+    padding: 0 20px;          
+    margin-top: 20px;
+    margin-bottom: auto;       
+}
+.citizen p{
+    color: #94a3b8;           
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+    padding: 0 20px;          
+    margin-top: 54px;
+    margin-bottom: auto;
 }
