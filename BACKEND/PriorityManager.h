@@ -1,7 +1,16 @@
-class PriorityManager {
+#ifndef PRIORITYMANAGER_H
+#define PRIORITYMANAGER_H
 
+#include <iostream>
+#include <queue>
+#include <vector>
+#include "EmergencyRequest.h"
+
+using namespace std;
+
+class PriorityManager
+{
 private:
-
     priority_queue<
         EmergencyRequest,
         vector<EmergencyRequest>,
@@ -10,8 +19,8 @@ private:
 
 public:
 
-    void addEmergency(EmergencyRequest request) {
-
+    void addEmergency(EmergencyRequest request)
+    {
         emergencyQueue.push(request);
 
         cout << "\nEmergency added successfully.";
@@ -19,20 +28,20 @@ public:
              << request.getPriority() << endl;
     }
 
-    bool isEmpty() const {
-
+    bool isEmpty() const
+    {
         return emergencyQueue.empty();
     }
 
-    EmergencyRequest getHighestPriority() {
-
+    EmergencyRequest getHighestPriority()
+    {
         return emergencyQueue.top();
     }
 
-    void processHighestPriority() {
-
-        if (emergencyQueue.empty()) {
-
+    void processHighestPriority()
+    {
+        if (emergencyQueue.empty())
+        {
             cout << "\nNo pending emergency requests.\n";
             return;
         }
@@ -48,10 +57,10 @@ public:
         cout << "\nRescue team should handle this request first.\n";
     }
 
-    void displayQueue() {
-
-        if (emergencyQueue.empty()) {
-
+    void displayQueue()
+    {
+        if (emergencyQueue.empty())
+        {
             cout << "\nNo pending emergencies.\n";
             return;
         }
@@ -64,8 +73,8 @@ public:
 
         cout << "\n========== PRIORITY QUEUE ==========\n";
 
-        while (!temp.empty()) {
-
+        while (!temp.empty())
+        {
             EmergencyRequest request = temp.top();
 
             cout << "\nRequest ID: "
@@ -88,3 +97,5 @@ public:
         cout << endl;
     }
 };
+
+#endif // PRIORITYMANAGER_H
