@@ -1,4 +1,12 @@
-class Victim {
+#ifndef VICTIM_H
+#define VICTIM_H
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Victim
+{
 private:
     int victimID;
     string name;
@@ -12,8 +20,8 @@ public:
     Victim() {}
 
     Victim(int id, string n, string loc, int people,
-           int injury, string disaster, string resource) {
-
+           int injury, string disaster, string resource)
+    {
         victimID = id;
         name = n;
         location = loc;
@@ -23,35 +31,43 @@ public:
         requiredResource = resource;
     }
 
-    int getID() const {
+    int getID() const
+    {
         return victimID;
     }
 
-    string getName() const {
+    string getName() const
+    {
         return name;
     }
 
-    string getLocation() const {
+    string getLocation() const
+    {
         return location;
     }
 
-    int getPeopleAffected() const {
+    int getPeopleAffected() const
+    {
         return peopleAffected;
     }
 
-    int getInjuryLevel() const {
+    int getInjuryLevel() const
+    {
         return injuryLevel;
     }
 
-    string getDisasterType() const {
+    string getDisasterType() const
+    {
         return disasterType;
     }
 
-    string getRequiredResource() const {
+    string getRequiredResource() const
+    {
         return requiredResource;
     }
-    int calculatePriority() const {
 
+    int calculatePriority() const
+    {
         int priority = (injuryLevel * 10) + peopleAffected;
 
         if (priority > 100)
@@ -60,8 +76,8 @@ public:
         return priority;
     }
 
-    void display() const {
-
+    void display() const
+    {
         cout << "\n----------------------------------------\n";
         cout << "Victim ID        : " << victimID << endl;
         cout << "Name             : " << name << endl;
@@ -74,3 +90,5 @@ public:
         cout << "----------------------------------------\n";
     }
 };
+
+#endif // VICTIM_H
