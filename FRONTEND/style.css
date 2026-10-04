@@ -54,6 +54,7 @@ nav{
     gap:30px;
     margin-right:5%;
 }
+<<<<<<< HEAD
 .nav-links a {
     color: white;
     transition: all 0.15s ease-in-out;
@@ -233,3 +234,5 @@ nav{
     margin-top: 54px;
     margin-bottom: auto;
 }
+=======
+>>>>>>> b79a4162c146a9506a18a51f814edd37e47936fb

@@ -1,0 +1,69 @@
+#ifndef EMERGENCYREQUEST_H
+#define EMERGENCYREQUEST_H
+
+#include <iostream>
+#include "Victim.h"
+
+using namespace std;
+
+class EmergencyRequest
+{
+private:
+    int requestID;
+    Victim victim;
+    bool processed;
+
+public:
+    EmergencyRequest(int id, Victim v)
+    {
+        requestID = id;
+        victim = v;
+        processed = false;
+    }
+
+    int getRequestID() const
+    {
+        return requestID;
+    }
+
+    Victim getVictim() const
+    {
+        return victim;
+    }
+
+    int getPriority() const
+    {
+        return victim.calculatePriority();
+    }
+
+    bool isProcessed() const
+    {
+        return processed;
+    }
+
+    void markProcessed()
+    {
+        processed = true;
+    }
+
+    void display() const
+    {
+        cout << "\nRequest ID: " << requestID;
+        cout << "\nPriority  : " << getPriority();
+        cout << "\nStatus    : "
+             << (processed ? "Processed" : "Pending");
+
+        victim.display();
+    }
+};
+
+struct ComparePriority
+{
+    bool operator()(const EmergencyRequest &a,
+                    const EmergencyRequest &b) const
+    {
+        return a.getPriority() < b.getPriority();
+    }
+};
+
+#endif // EMERGENCYREQUEST_H
