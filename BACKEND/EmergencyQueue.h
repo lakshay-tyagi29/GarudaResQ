@@ -10,11 +10,7 @@ struct QueueNode
 {
     EmergencyRequest request;
     QueueNode* next;
-
-    QueueNode(EmergencyRequest r)
-        : request(r), next(nullptr)
-    {
-    }
+    explicit QueueNode(const EmergencyRequest& r) : request(r), next(nullptr) {}
 };
 
 class EmergencyQueue
@@ -24,82 +20,85 @@ private:
     QueueNode* rear;
 
 public:
+    EmergencyQueue() : front(nullptr), rear(nullptr) {}
 
-    EmergencyQueue()
+    ~EmergencyQueue() { clear(); }
+    EmergencyQueue(const EmergencyQueue&) = delete;
+    EmergencyQueue& operator=(const EmergencyQueue&) = delete;
+
+    void clear()
     {
-        front = nullptr;
+        while (front != nullptr)
+        {
+            QueueNode* temp = front;
+            front = front->next;
+            delete temp;
+        }
         rear = nullptr;
     }
 
-    bool isEmpty() const
-    {
-        return front == nullptr;
-    }
+    bool isEmpty() const { return front == nullptr; }
 
-    void enqueue(EmergencyRequest request)
+    void enqueue(const EmergencyRequest& request)
     {
         QueueNode* newNode = new QueueNode(request);
-
-        if (rear == nullptr)
+        if (rear == nullptr) front = rear = newNode;
+        else
         {
-            front = rear = newNode;
-            return;
+            rear->next = newNode;
+            rear = newNode;
         }
-
-        rear->next = newNode;
-        rear = newNode;
     }
 
-    void dequeue()
+    bool dequeue()
     {
         if (isEmpty())
         {
             cout << "\nQueue is empty.\n";
-            return;
+            return false;
         }
-
         QueueNode* temp = front;
-
         front = front->next;
-
-        if (front == nullptr)
-        {
-            rear = nullptr;
-        }
-
+        if (front == nullptr) rear = nullptr;
         delete temp;
-
-        cout << "\nEmergency removed from queue.\n";
+        return true;
     }
 
-    void displayQueue()
+    bool removeByID(int requestID)
+    {
+        QueueNode* current = front;
+        QueueNode* previous = nullptr;
+        while (current != nullptr)
+        {
+            if (current->request.getRequestID() == requestID)
+            {
+                if (previous == nullptr) front = current->next;
+                else previous->next = current->next;
+                if (current == rear) rear = previous;
+                delete current;
+                return true;
+            }
+            previous = current;
+            current = current->next;
+        }
+        return false;
+    }
+
+    void displayQueue() const
     {
         if (isEmpty())
         {
             cout << "\nQueue is empty.\n";
             return;
         }
-
-        QueueNode* temp = front;
-
-        cout << "\n========== EMERGENCY QUEUE ==========\n";
-
-        while (temp != nullptr)
+        cout << "\n========== EMERGENCY QUEUE (FIFO) ==========\n";
+        for (QueueNode* temp = front; temp != nullptr; temp = temp->next)
         {
-            cout << "\nRequest ID: "
-                 << temp->request.getRequestID();
-
-            cout << "\nVictim: "
-                 << temp->request.getVictim().getName();
-
-            cout << "\nPriority: "
-                 << temp->request.getPriority();
-
-            cout << "\n-----------------------------------";
-
-            temp = temp->next;
+            cout << "\nRequest ID: " << temp->request.getRequestID()
+                 << "\nVictim: " << temp->request.getVictim().getName()
+                 << "\nPriority: " << temp->request.getPriority()
+                 << "\n-----------------------------------";
         }
-
         cout << endl;
     }
 };

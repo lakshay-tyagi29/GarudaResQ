@@ -19,7 +19,7 @@ public:
     {
         resourceID = id;
         resourceName = name;
-        quantity = qty;
+        quantity = qty < 0 ? 0 : qty;
     }
 
     int getResourceID() const
@@ -39,7 +39,11 @@ public:
 
     void distribute(int amount)
     {
-        if (amount <= quantity)
+        if (amount <= 0)
+        {
+            cout << "\nDistribution amount must be positive.";
+        }
+        else if (amount <= quantity)
         {
             quantity -= amount;
             cout << "\nResource distributed successfully.";

@@ -33,9 +33,17 @@ public:
         return emergencyQueue.empty();
     }
 
-    EmergencyRequest getHighestPriority()
+    // Call only after checking isEmpty().
+    EmergencyRequest getHighestPriority() const
     {
         return emergencyQueue.top();
+    }
+
+    bool removeHighestPriority()
+    {
+        if (emergencyQueue.empty()) return false;
+        emergencyQueue.pop();
+        return true;
     }
 
     void processHighestPriority()

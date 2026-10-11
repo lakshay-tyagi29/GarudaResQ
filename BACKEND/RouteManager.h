@@ -20,6 +20,11 @@ public:
 
     void addRoad(string from, string to, int distance)
     {
+        if (from.empty() || to.empty() || distance < 0)
+        {
+            cout << "\nRoad locations must be non-empty and distance cannot be negative.\n";
+            return;
+        }
         graph[from].push_back({to, distance});
         graph[to].push_back({from, distance});
 
@@ -92,8 +97,10 @@ public:
                 string nextNode = road.first;
                 int roadDistance = road.second;
 
-                int newDistance =
-                    currentDistance + roadDistance;
+                if (currentDistance > numeric_limits<int>::max() - roadDistance)
+                    continue;
+
+                int newDistance = currentDistance + roadDistance;
 
                 if (newDistance < distance[nextNode])
                 {
@@ -117,7 +124,13 @@ public:
         while (current != start)
         {
             path.push_back(current);
-            current = previous[current];
+            auto it = previous.find(current);
+            if (it == previous.end())
+            {
+                cout << "\nUnable to reconstruct route.\n";
+                return;
+            }
+            current = it->second;
         }
 
         path.push_back(start);
@@ -128,11 +141,11 @@ public:
 
         cout << "\nRoute: ";
 
-        for (int i = 0; i < path.size(); i++)
+        for (size_t i = 0; i < path.size(); i++)
         {
             cout << path[i];
 
-            if (i != path.size() - 1)
+            if (i + 1 != path.size())
                 cout << " -> ";
         }
 

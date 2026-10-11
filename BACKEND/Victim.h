@@ -17,7 +17,7 @@ private:
     string requiredResource;
 
 public:
-    Victim() {}
+    Victim() : victimID(0), peopleAffected(0), injuryLevel(1) {}
 
     Victim(int id, string n, string loc, int people,
            int injury, string disaster, string resource)
@@ -25,8 +25,8 @@ public:
         victimID = id;
         name = n;
         location = loc;
-        peopleAffected = people;
-        injuryLevel = injury;
+        peopleAffected = people < 0 ? 0 : people;
+        injuryLevel = (injury < 1 || injury > 5) ? 1 : injury;
         disasterType = disaster;
         requiredResource = resource;
     }

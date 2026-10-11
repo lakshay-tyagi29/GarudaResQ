@@ -20,7 +20,7 @@ public:
     {
         shelterID = id;
         location = loc;
-        capacity = cap;
+        capacity = cap < 0 ? 0 : cap;
         occupancy = 0;
     }
 
@@ -51,11 +51,16 @@ public:
 
     bool hasSpace(int people) const
     {
-        return occupancy + people <= capacity;
+        return people >= 0 && occupancy + people <= capacity;
     }
 
     void addPeople(int people)
     {
+        if (people <= 0)
+        {
+            cout << "\nNumber of people must be positive.";
+            return;
+        }
         if (hasSpace(people))
         {
             occupancy += people;

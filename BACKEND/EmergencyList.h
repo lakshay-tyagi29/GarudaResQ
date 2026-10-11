@@ -11,161 +11,142 @@ struct EmergencyNode
     EmergencyRequest request;
     EmergencyNode* next;
 
-    EmergencyNode(EmergencyRequest r)
-        : request(r), next(nullptr)
-    {
-    }
+    explicit EmergencyNode(const EmergencyRequest& r)
+        : request(r), next(nullptr) {}
 };
 
 class EmergencyList
 {
 private:
     EmergencyNode* head;
+    EmergencyNode* tail;
 
 public:
+    EmergencyList() : head(nullptr), tail(nullptr) {}
 
-    EmergencyList()
+    ~EmergencyList()
     {
-        head = nullptr;
+        clear();
     }
 
-    void addEmergency(EmergencyRequest request)
-    {
-        EmergencyNode* newNode = new EmergencyNode(request);
+    EmergencyList(const EmergencyList&) = delete;
+    EmergencyList& operator=(const EmergencyList&) = delete;
 
-        if (head == nullptr)
+    void clear()
+    {
+        while (head != nullptr)
         {
-            head = newNode;
+            EmergencyNode* temp = head;
+            head = head->next;
+            delete temp;
+        }
+        tail = nullptr;
+    }
+
+    bool isEmpty() const { return head == nullptr; }
+
+    bool containsRequestID(int requestID) const
+    {
+        for (EmergencyNode* temp = head; temp != nullptr; temp = temp->next)
+            if (temp->request.getRequestID() == requestID) return true;
+        return false;
+    }
+
+    void addEmergency(const EmergencyRequest& request)
+    {
+        if (containsRequestID(request.getRequestID()))
+        {
+            cout << "\nDuplicate Request ID. Emergency was not added to linked list.\n";
             return;
         }
 
-        EmergencyNode* temp = head;
-
-        while (temp->next != nullptr)
+        EmergencyNode* newNode = new EmergencyNode(request);
+        if (head == nullptr) head = tail = newNode;
+        else
         {
-            temp = temp->next;
+            tail->next = newNode;
+            tail = newNode;
         }
-
-        temp->next = newNode;
     }
 
-    void displayEmergencies()
+    bool markProcessed(int requestID)
     {
-        if (head == nullptr)
+        for (EmergencyNode* temp = head; temp != nullptr; temp = temp->next)
+        {
+            if (temp->request.getRequestID() == requestID)
+            {
+                temp->request.markProcessed();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void displayEmergencies() const
+    {
+        if (isEmpty())
         {
             cout << "\nNo emergencies in linked list.\n";
             return;
         }
 
-        EmergencyNode* temp = head;
-
         cout << "\n========== EMERGENCY LINKED LIST ==========\n";
-
-        while (temp != nullptr)
+        for (EmergencyNode* temp = head; temp != nullptr; temp = temp->next)
         {
-            cout << "\nRequest ID: "
-                 << temp->request.getRequestID();
-
-            cout << "\nVictim: "
-                 << temp->request.getVictim().getName();
-
-            cout << "\nLocation: "
-                 << temp->request.getVictim().getLocation();
-
-            cout << "\nPriority: "
-                 << temp->request.getPriority();
-
-            cout << "\n-----------------------------------";
-
-            temp = temp->next;
+            cout << "\nRequest ID: " << temp->request.getRequestID()
+                 << "\nVictim: " << temp->request.getVictim().getName()
+                 << "\nLocation: " << temp->request.getVictim().getLocation()
+                 << "\nPriority: " << temp->request.getPriority()
+                 << "\nStatus: " << (temp->request.isProcessed() ? "Processed" : "Pending")
+                 << "\n-----------------------------------";
         }
-
         cout << endl;
     }
-    void searchEmergency(int requestID)
+
+    bool searchEmergency(int requestID) const
     {
-    if (head == nullptr)
-    {
-        cout << "\nEmergency list is empty.\n";
-        return;
+        for (EmergencyNode* temp = head; temp != nullptr; temp = temp->next)
+        {
+            if (temp->request.getRequestID() == requestID)
+            {
+                cout << "\n========== EMERGENCY FOUND ==========\n";
+                temp->request.display();
+                cout << "\n=====================================\n";
+                return true;
+            }
+        }
+        cout << "\nEmergency with Request ID " << requestID << " not found.\n";
+        return false;
     }
 
-    EmergencyNode* temp = head;
-
-    while (temp != nullptr)
+    void sortByPriority()
     {
-        if (temp->request.getRequestID() == requestID)
+        if (head == nullptr || head->next == nullptr)
         {
-            cout << "\n========== EMERGENCY FOUND ==========\n";
-
-            cout << "\nRequest ID: "
-                 << temp->request.getRequestID();
-
-            cout << "\nVictim: "
-                 << temp->request.getVictim().getName();
-
-            cout << "\nLocation: "
-                 << temp->request.getVictim().getLocation();
-
-            cout << "\nPriority: "
-                 << temp->request.getPriority();
-
-            cout << "\n=====================================\n";
-
+            cout << "\nNot enough emergencies to sort.\n";
             return;
         }
 
-        temp = temp->next;
-    }
-
-    cout << "\nEmergency with Request ID "
-         << requestID
-         << " not found.\n";
-    }
-    void sortByPriority()
-   {
-    if (head == nullptr || head->next == nullptr)
-    {
-        cout << "\nNot enough emergencies to sort.\n";
-        return;
-    }
-
-    EmergencyNode* current;
-    EmergencyNode* last = nullptr;
-
-    bool swapped;
-
-    do
-    {
-        swapped = false;
-        current = head;
-
-        while (current->next != last)
+        bool swapped;
+        do
         {
-            if (current->request.getPriority() <
-                current->next->request.getPriority())
+            swapped = false;
+            EmergencyNode* current = head;
+            while (current->next != nullptr)
             {
-                EmergencyRequest temp = current->request;
-
-                current->request = current->next->request;
-                current->next->request = temp;
-
-                swapped = true;
+                if (current->request.getPriority() < current->next->request.getPriority())
+                {
+                    EmergencyRequest temp = current->request;
+                    current->request = current->next->request;
+                    current->next->request = temp;
+                    swapped = true;
+                }
+                current = current->next;
             }
+        } while (swapped);
 
-            current = current->next;
-        }
-
-        last = current;
-
-    } while (swapped);
-
-    cout << "\nEmergencies sorted by priority successfully.\n";
-    }
-    bool isEmpty() const
-    {
-        return head == nullptr;
+        cout << "\nEmergencies sorted by priority successfully.\n";
     }
 };
 
-#endif // EMERGENCYLIST_H
+#endif 

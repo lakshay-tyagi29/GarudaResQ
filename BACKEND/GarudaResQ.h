@@ -81,6 +81,12 @@ public:
 
         EmergencyRequest request(requestID, victim);
 
+        if (emergencyList.containsRequestID(requestID))
+        {
+            cout << "\nRequest ID already exists. Please use a unique ID.\n";
+            return;
+        }
+
         priorityManager.addEmergency(request);
         emergencyList.addEmergency(request);
         emergencyQueue.enqueue(request);
@@ -156,7 +162,10 @@ public:
 
                 team.assignTeam();
 
-                priorityManager.processHighestPriority();
+                // Keep the linked-list record and FIFO queue in sync with priority processing.
+                priorityManager.removeHighestPriority();
+                emergencyList.markProcessed(request.getRequestID());
+                emergencyQueue.removeByID(request.getRequestID());
 
                 cout << "\n\nEmergency assigned successfully.";
                 cout << "\nRescue team status: Assigned\n";
@@ -308,7 +317,7 @@ public:
 
         cout << "\n========== ADD ROAD ==========\n";
 
-        cin.ignore();
+        cin >> ws;
 
         cout << "From Location: ";
         getline(cin, from);
@@ -334,7 +343,7 @@ public:
 
         cout << "\n========== FIND SHORTEST ROUTE ==========\n";
 
-        cin.ignore();
+        cin >> ws;
 
         cout << "Start Location: ";
         getline(cin, start);
