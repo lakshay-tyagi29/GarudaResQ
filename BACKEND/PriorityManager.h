@@ -66,42 +66,31 @@ public:
 
     void displayQueue()
     {
-        if (emergencyQueue.empty())
-        {
-            cout << "\nNo pending emergencies.\n";
-            return;
-        }
+    if (emergencyQueue.empty())
+    {
+        std::cout << "\nNo pending emergencies.\n";
+        return;
+    }
 
-        priority_queue<
-            EmergencyRequest,
-            vector<EmergencyRequest>,
-            ComparePriority
-        > temp = emergencyQueue;
+    auto temp = emergencyQueue;
 
-        cout << "\n========== PRIORITY QUEUE ==========\n";
+    std::cout << "\n========== PRIORITY QUEUE ==========\n";
 
-        while (!temp.empty())
-        {
-            EmergencyRequest request = temp.top();
+    while (!temp.empty())
+    {
+        const auto &request = temp.top();
+        const auto &victim = request.getVictim();
 
-            cout << "\nRequest ID: "
-                 << request.getRequestID();
+        std::cout << "\nRequest ID: " << request.getRequestID()
+                  << "\nVictim: " << victim.getName()
+                  << "\nLocation: " << victim.getLocation()
+                  << "\nPriority: " << request.getPriority()
+                  << "\n-----------------------------------";
 
-            cout << "\nVictim: "
-                 << request.getVictim().getName();
+        temp.pop();
+    }
 
-            cout << "\nLocation: "
-                 << request.getVictim().getLocation();
-
-            cout << "\nPriority: "
-                 << request.getPriority();
-
-            cout << "\n-----------------------------------";
-
-            temp.pop();
-        }
-
-        cout << endl;
+    std::cout << std::endl;
     }
 };
 
