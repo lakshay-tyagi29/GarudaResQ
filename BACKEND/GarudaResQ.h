@@ -281,6 +281,41 @@ public:
 
         std::cout << "\nShelter added successfully.\n";
     }
+    void updateShelter()
+    {
+    if (shelters.empty())
+    {
+        std::cout << "\nNo shelters available to update.\n";
+        return;
+    }
+
+    int id;
+
+    std::cout << "\nEnter Shelter ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            std::string location;
+            int capacity;
+
+            std::cin >> std::ws;
+
+            std::cout << "Enter new location: ";
+            std::getline(std::cin, location);
+
+            std::cout << "Enter new capacity: ";
+            std::cin >> capacity;
+
+            shelters[i].updateShelter(location, capacity);
+            return;
+        }
+    }
+
+    std::cout << "\nShelter ID not found.\n";
+    }
 
     void showShelters()
     {
