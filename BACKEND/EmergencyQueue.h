@@ -103,4 +103,4 @@ public:
     }
 };
 
-#endif // EMERGENCYQUEUE_H
+#endif 

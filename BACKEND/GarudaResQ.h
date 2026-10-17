@@ -13,17 +13,15 @@
 #include "EmergencyList.h"
 #include "EmergencyQueue.h"
 
-using namespace std;
-
 class GarudaResQ
 {
 private:
     PriorityManager priorityManager;
     EmergencyList emergencyList;
     EmergencyQueue emergencyQueue;
-    vector<RescueTeam> rescueTeams;
-    vector<Shelter> shelters;
-    vector<Resource> resources;
+    std::vector<RescueTeam> rescueTeams;
+    std::vector<Shelter> shelters;
+    std::vector<Resource> resources;
     RouteManager routeManager;
 
 public:
@@ -32,42 +30,42 @@ public:
     {
         int requestID;
         int victimID;
-        string name;
-        string location;
+        std::string name;
+        std::string location;
         int peopleAffected;
         int injuryLevel;
-        string disasterType;
-        string requiredResource;
+        std::string disasterType;
+        std::string requiredResource;
 
-        cout << "\n========== REPORT EMERGENCY ==========\n";
+        std::cout << "\n========== REPORT EMERGENCY ==========\n";
 
-        cout << "Request ID: ";
-        cin >> requestID;
+        std::cout << "Request ID: ";
+        std::cin >> requestID;
 
-        cout << "Victim ID: ";
-        cin >> victimID;
+        std::cout << "Victim ID: ";
+        std::cin >> victimID;
 
-        cin.ignore();
+        std::cin.ignore();
 
-        cout << "Victim Name: ";
-        getline(cin, name);
+        std::cout << "Victim Name: ";
+        std::getline(std::cin, name);
 
-        cout << "Location: ";
-        getline(cin, location);
+        std::cout << "Location: ";
+        std::getline(std::cin, location);
 
-        cout << "People Affected: ";
-        cin >> peopleAffected;
+        std::cout << "People Affected: ";
+        std::cin >> peopleAffected;
 
-        cout << "Injury Level (1-5): ";
-        cin >> injuryLevel;
+        std::cout << "Injury Level (1-5): ";
+        std::cin >> injuryLevel;
 
-        cin.ignore();
+        std::cin.ignore();
 
-        cout << "Disaster Type: ";
-        getline(cin, disasterType);
+        std::cout << "Disaster Type: ";
+        std::getline(std::cin, disasterType);
 
-        cout << "Required Resource: ";
-        getline(cin, requiredResource);
+        std::cout << "Required Resource: ";
+        std::getline(std::cin, requiredResource);
 
         Victim victim(
             victimID,
@@ -83,7 +81,7 @@ public:
 
         if (emergencyList.containsRequestID(requestID))
         {
-            cout << "\nRequest ID already exists. Please use a unique ID.\n";
+            std::cout << "\nRequest ID already exists. Please use a unique ID.\n";
             return;
         }
 
@@ -96,34 +94,39 @@ public:
     {
         priorityManager.displayQueue();
     }
+
     void showEmergencyList()
     {
-    emergencyList.displayEmergencies();
+        emergencyList.displayEmergencies();
     }
+
     void searchEmergency()
     {
-    int requestID;
+        int requestID;
 
-    cout << "\n========== SEARCH EMERGENCY ==========\n";
+        std::cout << "\n========== SEARCH EMERGENCY ==========\n";
 
-    cout << "Enter Request ID: ";
-    cin >> requestID;
+        std::cout << "Enter Request ID: ";
+        std::cin >> requestID;
 
-    emergencyList.searchEmergency(requestID);
+        emergencyList.searchEmergency(requestID);
     }
+
     void sortEmergencies()
     {
-    emergencyList.sortByPriority();
+        emergencyList.sortByPriority();
     }
+
     void showEmergencyQueue()
     {
-    emergencyQueue.displayQueue();
+        emergencyQueue.displayQueue();
     }
+
     void processEmergency()
     {
         if (priorityManager.isEmpty())
         {
-            cout << "\nNo pending emergency requests.\n";
+            std::cout << "\nNo pending emergency requests.\n";
             return;
         }
 
@@ -133,42 +136,40 @@ public:
         {
             if (team.isAvailable())
             {
-                EmergencyRequest request =
-                    priorityManager.getHighestPriority();
+                EmergencyRequest request = priorityManager.getHighestPriority();
 
-                cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
+                std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
 
-                cout << "\nEmergency Request ID: "
-                     << request.getRequestID();
+                std::cout << "\nEmergency Request ID: "
+                          << request.getRequestID();
 
-                cout << "\nVictim: "
-                     << request.getVictim().getName();
+                std::cout << "\nVictim: "
+                          << request.getVictim().getName();
 
-                cout << "\nLocation: "
-                     << request.getVictim().getLocation();
+                std::cout << "\nLocation: "
+                          << request.getVictim().getLocation();
 
-                cout << "\nPriority: "
-                     << request.getPriority();
+                std::cout << "\nPriority: "
+                          << request.getPriority();
 
-                cout << "\n\nRescue Team Assigned:";
-                cout << "\nTeam ID: "
-                     << team.getTeamID();
+                std::cout << "\n\nRescue Team Assigned:";
+                std::cout << "\nTeam ID: "
+                          << team.getTeamID();
 
-                cout << "\nTeam Name: "
-                     << team.getTeamName();
+                std::cout << "\nTeam Name: "
+                          << team.getTeamName();
 
-                cout << "\nTeam Location: "
-                     << team.getLocation();
+                std::cout << "\nTeam Location: "
+                          << team.getLocation();
 
                 team.assignTeam();
 
-                // Keep the linked-list record and FIFO queue in sync with priority processing.
                 priorityManager.removeHighestPriority();
                 emergencyList.markProcessed(request.getRequestID());
                 emergencyQueue.removeByID(request.getRequestID());
 
-                cout << "\n\nEmergency assigned successfully.";
-                cout << "\nRescue team status: Assigned\n";
+                std::cout << "\n\nEmergency assigned successfully.";
+                std::cout << "\nRescue team status: Assigned\n";
 
                 teamAssigned = true;
 
@@ -178,46 +179,46 @@ public:
 
         if (!teamAssigned)
         {
-            cout << "\nNo rescue team is currently available.\n";
-            cout << "Emergency remains in the priority queue.\n";
+            std::cout << "\nNo rescue team is currently available.\n";
+            std::cout << "Emergency remains in the priority queue.\n";
         }
     }
 
     void addRescueTeam()
     {
         int id;
-        string name;
-        string location;
+        std::string name;
+        std::string location;
 
-        cout << "\n========== ADD RESCUE TEAM ==========\n";
+        std::cout << "\n========== ADD RESCUE TEAM ==========\n";
 
-        cout << "Team ID: ";
-        cin >> id;
+        std::cout << "Team ID: ";
+        std::cin >> id;
 
-        cin.ignore();
+        std::cin.ignore();
 
-        cout << "Team Name: ";
-        getline(cin, name);
+        std::cout << "Team Name: ";
+        std::getline(std::cin, name);
 
-        cout << "Location: ";
-        getline(cin, location);
+        std::cout << "Location: ";
+        std::getline(std::cin, location);
 
         RescueTeam team(id, name, location);
 
         rescueTeams.push_back(team);
 
-        cout << "\nRescue team added successfully.\n";
+        std::cout << "\nRescue team added successfully.\n";
     }
 
     void showRescueTeams()
     {
         if (rescueTeams.empty())
         {
-            cout << "\nNo rescue teams available.\n";
+            std::cout << "\nNo rescue teams available.\n";
             return;
         }
 
-        cout << "\n========== RESCUE TEAMS ==========\n";
+        std::cout << "\n========== RESCUE TEAMS ==========\n";
 
         for (auto &team : rescueTeams)
         {
@@ -228,38 +229,38 @@ public:
     void addShelter()
     {
         int id;
-        string location;
+        std::string location;
         int capacity;
 
-        cout << "\n========== ADD SHELTER ==========\n";
+        std::cout << "\n========== ADD SHELTER ==========\n";
 
-        cout << "Shelter ID: ";
-        cin >> id;
+        std::cout << "Shelter ID: ";
+        std::cin >> id;
 
-        cin.ignore();
+        std::cin.ignore();
 
-        cout << "Location: ";
-        getline(cin, location);
+        std::cout << "Location: ";
+        std::getline(std::cin, location);
 
-        cout << "Capacity: ";
-        cin >> capacity;
+        std::cout << "Capacity: ";
+        std::cin >> capacity;
 
         Shelter shelter(id, location, capacity);
 
         shelters.push_back(shelter);
 
-        cout << "\nShelter added successfully.\n";
+        std::cout << "\nShelter added successfully.\n";
     }
 
     void showShelters()
     {
         if (shelters.empty())
         {
-            cout << "\nNo shelters available.\n";
+            std::cout << "\nNo shelters available.\n";
             return;
         }
 
-        cout << "\n========== SHELTERS ==========\n";
+        std::cout << "\n========== SHELTERS ==========\n";
 
         for (auto &shelter : shelters)
         {
@@ -270,38 +271,38 @@ public:
     void addResource()
     {
         int id;
-        string name;
+        std::string name;
         int quantity;
 
-        cout << "\n========== ADD RESOURCE ==========\n";
+        std::cout << "\n========== ADD RESOURCE ==========\n";
 
-        cout << "Resource ID: ";
-        cin >> id;
+        std::cout << "Resource ID: ";
+        std::cin >> id;
 
-        cin.ignore();
+        std::cin.ignore();
 
-        cout << "Resource Name: ";
-        getline(cin, name);
+        std::cout << "Resource Name: ";
+        std::getline(std::cin, name);
 
-        cout << "Quantity: ";
-        cin >> quantity;
+        std::cout << "Quantity: ";
+        std::cin >> quantity;
 
         Resource resource(id, name, quantity);
 
         resources.push_back(resource);
 
-        cout << "\nResource added successfully.\n";
+        std::cout << "\nResource added successfully.\n";
     }
 
     void showResources()
     {
         if (resources.empty())
         {
-            cout << "\nNo resources available.\n";
+            std::cout << "\nNo resources available.\n";
             return;
         }
 
-        cout << "\n========== RESOURCES ==========\n";
+        std::cout << "\n========== RESOURCES ==========\n";
 
         for (auto &resource : resources)
         {
@@ -311,22 +312,22 @@ public:
 
     void addRoad()
     {
-        string from;
-        string to;
+        std::string from;
+        std::string to;
         int distance;
 
-        cout << "\n========== ADD ROAD ==========\n";
+        std::cout << "\n========== ADD ROAD ==========\n";
 
-        cin >> ws;
+        std::cin >> std::ws;
 
-        cout << "From Location: ";
-        getline(cin, from);
+        std::cout << "From Location: ";
+        std::getline(std::cin, from);
 
-        cout << "To Location: ";
-        getline(cin, to);
+        std::cout << "To Location: ";
+        std::getline(std::cin, to);
 
-        cout << "Distance (km): ";
-        cin >> distance;
+        std::cout << "Distance (km): ";
+        std::cin >> distance;
 
         routeManager.addRoad(from, to, distance);
     }
@@ -338,18 +339,18 @@ public:
 
     void findRoute()
     {
-        string start;
-        string destination;
+        std::string start;
+        std::string destination;
 
-        cout << "\n========== FIND SHORTEST ROUTE ==========\n";
+        std::cout << "\n========== FIND SHORTEST ROUTE ==========\n";
 
-        cin >> ws;
+        std::cin >> std::ws;
 
-        cout << "Start Location: ";
-        getline(cin, start);
+        std::cout << "Start Location: ";
+        std::getline(std::cin, start);
 
-        cout << "Destination: ";
-        getline(cin, destination);
+        std::cout << "Destination: ";
+        std::getline(std::cin, destination);
 
         routeManager.findShortestRoute(start, destination);
     }
@@ -360,30 +361,30 @@ public:
 
         do
         {
-            cout << "\n\n========================================";
-            cout << "\n           GARUDARESQ";
-            cout << "\n========================================";
+            std::cout << "\n\n========================================";
+            std::cout << "\n           GARUDARESQ";
+            std::cout << "\n========================================";
 
-            cout << "\n1. Report Emergency";
-            cout << "\n2. Show Emergency Queue";
-            cout << "\n3. Process Highest Priority Emergency";
-            cout << "\n4. Add Rescue Team";
-            cout << "\n5. Show Rescue Teams";
-            cout << "\n6. Add Shelter";
-            cout << "\n7. Show Shelters";
-            cout << "\n8. Add Resource";
-            cout << "\n9. Show Resources";
-            cout << "\n10. Add Road";
-            cout << "\n11. Show Roads";
-            cout << "\n12. Find Shortest Route";
-            cout << "\n13. Show Emergency Linked List";
-            cout << "\n14. Search Emergency";
-            cout << "\n15. Sort Emergencies by Priority";
-            cout << "\n16. Show Normal Emergency Queue";
-            cout << "\n0. Exit";
+            std::cout << "\n1. Report Emergency";
+            std::cout << "\n2. Show Emergency Queue";
+            std::cout << "\n3. Process Highest Priority Emergency";
+            std::cout << "\n4. Add Rescue Team";
+            std::cout << "\n5. Show Rescue Teams";
+            std::cout << "\n6. Add Shelter";
+            std::cout << "\n7. Show Shelters";
+            std::cout << "\n8. Add Resource";
+            std::cout << "\n9. Show Resources";
+            std::cout << "\n10. Add Road";
+            std::cout << "\n11. Show Roads";
+            std::cout << "\n12. Find Shortest Route";
+            std::cout << "\n13. Show Emergency Linked List";
+            std::cout << "\n14. Search Emergency";
+            std::cout << "\n15. Sort Emergencies by Priority";
+            std::cout << "\n16. Show Normal Emergency Queue";
+            std::cout << "\n0. Exit";
 
-            cout << "\n\nEnter choice: ";
-            cin >> choice;
+            std::cout << "\n\nEnter choice: ";
+            std::cin >> choice;
 
             switch (choice)
             {
@@ -434,28 +435,33 @@ public:
                 case 12:
                     findRoute();
                     break;
+
                 case 13:
                     showEmergencyList();
                     break;
+
                 case 14:
                     searchEmergency();
                     break;
+
                 case 15:
                     sortEmergencies();
                     break;
+
                 case 16:
                     showEmergencyQueue();
                     break;
+
                 case 0:
-                    cout << "\nExiting GarudaResQ...\n";
+                    std::cout << "\nExiting GarudaResQ...\n";
                     break;
 
                 default:
-                    cout << "\nInvalid choice.\n";
+                    std::cout << "\nInvalid choice.\n";
             }
 
         } while (choice != 0);
     }
 };
 
-#endif // GARUDARESQ_H
+#endif

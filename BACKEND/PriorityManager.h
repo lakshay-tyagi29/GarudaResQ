@@ -33,7 +33,6 @@ public:
         return emergencyQueue.empty();
     }
 
-    // Call only after checking isEmpty().
     EmergencyRequest getHighestPriority() const
     {
         return emergencyQueue.top();
@@ -106,4 +105,4 @@ public:
     }
 };
 
-#endif // PRIORITYMANAGER_H
+#endif 
