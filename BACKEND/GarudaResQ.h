@@ -302,6 +302,40 @@ public:
     }
 
     cout << "\nShelter ID not found.\n";
+
+    }
+
+    void assignPeopleToShelter()
+    {
+    if (shelters.empty())
+    {
+        cout << "\nNo shelters available.\n";
+        return;
+    }
+
+    int id;
+    int people;
+
+    cout << "\nEnter Shelter ID: ";
+    cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            cout << "Enter number of people: ";
+            cin >> people;
+
+            shelters[i].addPeople(people);
+
+            cout << "\nAvailable space: "
+                 << shelters[i].getAvailableSpace() << "\n";
+
+            return;
+        }
+    }
+
+    cout << "\nShelter ID not found.\n";
     }
 
     void addResource()
