@@ -132,49 +132,47 @@ public:
 
         bool teamAssigned = false;
 
-        for (auto &team : rescueTeams)
+        for (int i = 0; i < rescueTeams.size(); i++)
         {
-            if (team.isAvailable())
-            {
-                EmergencyRequest request = priorityManager.getHighestPriority();
+        if (rescueTeams[i].isAvailable())
+        {
+        EmergencyRequest request = priorityManager.getHighestPriority();
 
-                std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
+        std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
+        std::cout << "\nEmergency Request ID: "
+                  << request.getRequestID();
 
-                std::cout << "\nEmergency Request ID: "
-                          << request.getRequestID();
+        std::cout << "\nVictim: "
+                  << request.getVictim().getName();
 
-                std::cout << "\nVictim: "
-                          << request.getVictim().getName();
+        std::cout << "\nLocation: "
+                  << request.getVictim().getLocation();
 
-                std::cout << "\nLocation: "
-                          << request.getVictim().getLocation();
+        std::cout << "\nPriority: "
+                  << request.getPriority();
 
-                std::cout << "\nPriority: "
-                          << request.getPriority();
+        std::cout << "\n\nRescue Team Assigned:";
+        std::cout << "\nTeam ID: "
+                  << rescueTeams[i].getTeamID();
 
-                std::cout << "\n\nRescue Team Assigned:";
-                std::cout << "\nTeam ID: "
-                          << team.getTeamID();
+        std::cout << "\nTeam Name: "
+                  << rescueTeams[i].getTeamName();
 
-                std::cout << "\nTeam Name: "
-                          << team.getTeamName();
+        std::cout << "\nTeam Location: "
+                  << rescueTeams[i].getLocation();
 
-                std::cout << "\nTeam Location: "
-                          << team.getLocation();
+        rescueTeams[i].assignTeam();
 
-                team.assignTeam();
+        priorityManager.removeHighestPriority();
+        emergencyList.markProcessed(request.getRequestID());
+        emergencyQueue.removeByID(request.getRequestID());
 
-                priorityManager.removeHighestPriority();
-                emergencyList.markProcessed(request.getRequestID());
-                emergencyQueue.removeByID(request.getRequestID());
+        std::cout << "\n\nEmergency assigned successfully.";
+        std::cout << "\nRescue team status: Assigned\n";
 
-                std::cout << "\n\nEmergency assigned successfully.";
-                std::cout << "\nRescue team status: Assigned\n";
-
-                teamAssigned = true;
-
-                break;
-            }
+        teamAssigned = true;
+        break;
+        }
         }
 
         if (!teamAssigned)
