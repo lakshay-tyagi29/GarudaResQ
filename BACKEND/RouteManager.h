@@ -55,103 +55,97 @@ public:
         }
     }
 
-    void findShortestRoute(string start, string destination)
+    void findShortestRoute(const std::string &start, const std::string &destination)
     {
-        if (graph.find(start) == graph.end() ||
-            graph.find(destination) == graph.end())
+    if (graph.find(start) == graph.end() || graph.find(destination) == graph.end())
+    {
+        std::cout << "\nLocation not found in road network.\n";
+        return;
+    }
+
+    std::unordered_map<std::string, int> distance;
+    std::unordered_map<std::string, std::string> previous;
+
+    for (const auto &pair : graph)
+    {
+        distance[pair.first] = std::numeric_limits<int>::max();
+    }
+
+    std::priority_queue<
+        std::pair<int, std::string>,
+        std::vector<std::pair<int, std::string>>,
+        std::greater<std::pair<int, std::string>>
+    > pq;
+
+    distance[start] = 0;
+    pq.push({0, start});
+
+    while (!pq.empty())
+    {
+        int currentDistance = pq.top().first;
+        std::string currentNode = pq.top().second;
+        pq.pop();
+
+        if (currentDistance > distance[currentNode])
+            continue;
+
+        if (currentNode == destination)
+            break;
+
+        for (const auto &road : graph[currentNode])
         {
-            cout << "\nLocation not found in road network.\n";
-            return;
-        }
+            std::string nextNode = road.first;
+            int roadDistance = road.second;
 
-        unordered_map<string, int> distance;
-        unordered_map<string, string> previous;
-
-        for (auto &node : graph)
-        {
-            distance[node.first] = numeric_limits<int>::max();
-        }
-
-        priority_queue<
-            pair<int, string>,
-            vector<pair<int, string>>,
-            greater<pair<int, string>>
-        > pq;
-
-        distance[start] = 0;
-
-        pq.push({0, start});
-
-        while (!pq.empty())
-        {
-            int currentDistance = pq.top().first;
-            string currentNode = pq.top().second;
-
-            pq.pop();
-
-            if (currentDistance > distance[currentNode])
+            if (currentDistance > std::numeric_limits<int>::max() - roadDistance)
                 continue;
 
-            for (auto &road : graph[currentNode])
+            int newDistance = currentDistance + roadDistance;
+
+            if (newDistance < distance[nextNode])
             {
-                string nextNode = road.first;
-                int roadDistance = road.second;
-
-                if (currentDistance > numeric_limits<int>::max() - roadDistance)
-                    continue;
-
-                int newDistance = currentDistance + roadDistance;
-
-                if (newDistance < distance[nextNode])
-                {
-                    distance[nextNode] = newDistance;
-                    previous[nextNode] = currentNode;
-
-                    pq.push({newDistance, nextNode});
-                }
+                distance[nextNode] = newDistance;
+                previous[nextNode] = currentNode;
+                pq.push({newDistance, nextNode});
             }
         }
+    }
 
-        if (distance[destination] == numeric_limits<int>::max())
+    if (distance[destination] == std::numeric_limits<int>::max())
+    {
+        std::cout << "\nNo route available.\n";
+        return;
+    }
+
+    std::vector<std::string> path;
+    std::string current = destination;
+
+    while (current != start)
+    {
+        path.push_back(current);
+        auto it = previous.find(current);
+        if (it == previous.end())
         {
-            cout << "\nNo route available.\n";
+            std::cout << "\nUnable to reconstruct route.\n";
             return;
         }
+        current = it->second;
+    }
 
-        vector<string> path;
-        string current = destination;
+    path.push_back(start);
+    std::reverse(path.begin(), path.end());
 
-        while (current != start)
-        {
-            path.push_back(current);
-            auto it = previous.find(current);
-            if (it == previous.end())
-            {
-                cout << "\nUnable to reconstruct route.\n";
-                return;
-            }
-            current = it->second;
-        }
+    std::cout << "\n========== SHORTEST ROUTE ==========\n"
+              << "\nRoute: ";
 
-        path.push_back(start);
+    for (size_t i = 0; i < path.size(); ++i)
+    {
+        std::cout << path[i];
+        if (i + 1 != path.size())
+            std::cout << " -> ";
+    }
 
-        reverse(path.begin(), path.end());
-
-        cout << "\n========== SHORTEST ROUTE ==========\n";
-
-        cout << "\nRoute: ";
-
-        for (size_t i = 0; i < path.size(); i++)
-        {
-            cout << path[i];
-
-            if (i + 1 != path.size())
-                cout << " -> ";
-        }
-
-        cout << "\nTotal Distance: "
-             << distance[destination]
-             << " km\n";
+    std::cout << "\nTotal Distance: " << distance[destination] << " km\n";
     }
 };
 
