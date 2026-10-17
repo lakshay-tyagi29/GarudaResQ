@@ -585,6 +585,10 @@ public:
             std::cout << "\n14. Search Emergency";
             std::cout << "\n15. Sort Emergencies by Priority";
             std::cout << "\n16. Show Normal Emergency Queue";
+            std::cout << "\n17. Update Shelter";
+            std::cout << "\n18. Assign People to Shelter";
+            std::cout << "\n19. Make Rescue Team Available";
+            std::cout << "\n20. Distribute Resource";
             std::cout << "\n0. Exit";
 
             std::cout << "\n\nEnter choice: ";
@@ -654,6 +658,21 @@ public:
 
                 case 16:
                     showEmergencyQueue();
+                    break;
+                case 17:
+                    updateShelter();
+                    break;
+
+                case 18:
+                    assignPeopleToShelter();
+                    break;
+
+                case 19:
+                    makeRescueTeamAvailable();
+                    break;
+
+                case 20:
+                    distributeResource();
                     break;
 
                 case 0:
