@@ -250,9 +250,9 @@ public:
 
         std::cout << "\n========== RESCUE TEAMS ==========\n";
 
-        for (auto &team : rescueTeams)
+       for (int i = 0; i < rescueTeams.size(); i++)
         {
-            team.display();
+           rescueTeams[i].display();
         }
     }
 
