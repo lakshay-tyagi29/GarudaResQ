@@ -360,9 +360,9 @@ public:
 
         std::cout << "\n========== SHELTERS ==========\n";
 
-        for (auto &shelter : shelters)
+        for (int i = 0; i < shelters.size(); i++)
         {
-            shelter.display();
+          shelters[i].display();
         }
     }
 
