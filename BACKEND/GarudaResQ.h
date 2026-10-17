@@ -316,6 +316,39 @@ public:
 
     std::cout << "\nShelter ID not found.\n";
     }
+    void assignPeopleToShelter()
+    {
+    if (shelters.empty())
+    {
+        std::cout << "\nNo shelters available.\n";
+        return;
+    }
+
+    int id;
+    int people;
+
+    std::cout << "\nEnter Shelter ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            std::cout << "Enter number of people: ";
+            std::cin >> people;
+
+            shelters[i].addPeople(people);
+
+            std::cout << "\nAvailable space: "
+                      << shelters[i].getAvailableSpace() << "\n";
+
+            return;
+        }
+    }
+
+    std::cout << "\nShelter ID not found.\n";
+    }
+
 
     void showShelters()
     {
