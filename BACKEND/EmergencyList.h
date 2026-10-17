@@ -136,9 +136,9 @@ public:
             {
                 if (current->request.getPriority() < current->next->request.getPriority())
                 {
-                    EmergencyRequest temp = current->request;
+                    EmergencyRequest temporary = current->request;
                     current->request = current->next->request;
-                    current->next->request = temp;
+                    current->next->request = temporary;
                     swapped = true;
                 }
                 current = current->next;
