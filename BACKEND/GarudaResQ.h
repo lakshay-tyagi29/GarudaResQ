@@ -268,6 +268,42 @@ public:
         }
     }
 
+    void updateShelter()
+    {
+    if (shelters.empty())
+    {
+        cout << "\nNo shelters available to update.\n";
+        return;
+    }
+
+    int id;
+
+    cout << "\nEnter Shelter ID: ";
+    cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            string location;
+            int capacity;
+
+            cin.ignore();
+
+            cout << "Enter new location: ";
+            getline(cin, location);
+
+            cout << "Enter new capacity: ";
+            cin >> capacity;
+
+            shelters[i].updateShelter(location, capacity);
+            return;
+        }
+    }
+
+    cout << "\nShelter ID not found.\n";
+    }
+
     void addResource()
     {
         int id;
