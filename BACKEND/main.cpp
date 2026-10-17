@@ -18,167 +18,204 @@
 #include "RouteManager.h"
 #include "GarudaResQ.h"
 
-using namespace std;
-
-void runCitizenPortal(GarudaResQ& resq, AuthManager& auth) {
+void runCitizenPortal(GarudaResQ &resq, AuthManager &auth)
+{
     User citizen = auth.registerCitizen();
-    int choice;
-    do {
-        cout << "\n=========================================\n";
-        cout << "       CITIZEN PORTAL (" << citizen.username << ")\n";
-        cout << "=========================================\n";
-        cout << "1. Report New Emergency Request\n";
-        cout << "2. View Nearby Shelters\n";
-        cout << "3. Search Emergency Request Status\n";
-        cout << "4. Logout to Main Portal\n";
-        cout << "Enter Choice: ";
-        cin >> choice;
+    int choice = 0;
 
-        if (choice == 1) {
+    do
+    {
+        std::cout << "\n=========================================\n"
+                  << "       CITIZEN PORTAL (" << citizen.username << ")\n"
+                  << "=========================================\n"
+                  << "1. Report New Emergency Request\n"
+                  << "2. View Nearby Shelters\n"
+                  << "3. Search Emergency Request Status\n"
+                  << "4. Logout to Main Portal\n"
+                  << "Enter Choice: ";
+        std::cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
             resq.reportEmergency();
-        }
-        else if (choice == 2) {
+            break;
+        case 2:
             resq.showShelters();
-        }
-        else if (choice == 3) {
+            break;
+        case 3:
             resq.searchEmergency();
+            break;
+        case 4:
+            break;
+        default:
+            std::cout << "\n[-] Invalid Choice! Try again.\n";
+            break;
         }
     } while (choice != 4);
 }
 
-void runNGOPortal(GarudaResQ& resq, AuthManager& auth) {
-    int subChoice;
-    cout << "\n-----------------------------------------\n";
-    cout << "1. Official NGO Login\n2. Register New NGO Worker\nEnter Choice: ";
-    cin >> subChoice;
+void runNGOPortal(GarudaResQ &resq, AuthManager &auth)
+{
+    int subChoice = 0;
+    std::cout << "\n-----------------------------------------\n"
+              << "1. Official NGO Login\n2. Register New NGO Worker\nEnter Choice: ";
+    std::cin >> subChoice;
 
-    if (subChoice == 2) {
+    if (subChoice == 2)
+    {
         auth.registerOfficial(NGO);
     }
 
     User ngoUser = auth.loginOfficial(NGO);
-    if (ngoUser.role != NGO) return;
+    if (ngoUser.role != NGO)
+        return;
 
-    int choice;
-    do {
-        cout << "\n=========================================\n";
-        cout << "          NGO DASHBOARD (" << ngoUser.username << ")\n";
-        cout << "=========================================\n";
-        cout << "1. View Active Priority Emergency Requests\n";
-        cout << "2. Process Highest Priority Emergency\n";
-        cout << "3. View All Emergency Records (Linked List)\n";
-        cout << "4. Search Emergency Request by ID\n";
-        cout << "5. Add Rescue Team\n";
-        cout << "6. View Active Rescue Teams Status\n";
-        cout << "7. Add Road Route\n";
-        cout << "8. Show Road Routes\n";
-        cout << "9. Find Shortest Route\n";
-        cout << "10. Logout to Main Portal\n";
-        cout << "Enter Choice: ";
-        cin >> choice;
+    int choice = 0;
+    do
+    {
+        std::cout << "\n=========================================\n"
+                  << "          NGO DASHBOARD (" << ngoUser.username << ")\n"
+                  << "=========================================\n"
+                  << "1. View Active Priority Emergency Requests\n"
+                  << "2. Process Highest Priority Emergency\n"
+                  << "3. View All Emergency Records (Linked List)\n"
+                  << "4. Search Emergency Request by ID\n"
+                  << "5. Add Rescue Team\n"
+                  << "6. View Active Rescue Teams Status\n"
+                  << "7. Add Road Route\n"
+                  << "8. Show Road Routes\n"
+                  << "9. Find Shortest Route\n"
+                  << "10. Logout to Main Portal\n"
+                  << "Enter Choice: ";
+        std::cin >> choice;
 
-        if (choice == 1) {
+        switch (choice)
+        {
+        case 1:
             resq.showEmergencies();
-        }
-        else if (choice == 2) {
+            break;
+        case 2:
             resq.processEmergency();
-        }
-        else if (choice == 3) {
+            break;
+        case 3:
             resq.showEmergencyList();
-        }
-        else if (choice == 4) {
+            break;
+        case 4:
             resq.searchEmergency();
-        }
-        else if (choice == 5) {
+            break;
+        case 5:
             resq.addRescueTeam();
-        }
-        else if (choice == 6) {
+            break;
+        case 6:
             resq.showRescueTeams();
-        }
-        else if (choice == 7) {
+            break;
+        case 7:
             resq.addRoad();
-        }
-        else if (choice == 8) {
+            break;
+        case 8:
             resq.showRoads();
-        }
-        else if (choice == 9) {
+            break;
+        case 9:
             resq.findRoute();
+            break;
+        case 10:
+            break;
+        default:
+            std::cout << "\n[-] Invalid Choice! Try again.\n";
+            break;
         }
     } while (choice != 10);
 }
 
-void runShelterPortal(GarudaResQ& resq, AuthManager& auth) {
-    int subChoice;
-    cout << "\n-----------------------------------------\n";
-    cout << "1. Official Shelter Login\n2. Register New Shelter Admin\nEnter Choice: ";
-    cin >> subChoice;
+void runShelterPortal(GarudaResQ &resq, AuthManager &auth)
+{
+    int subChoice = 0;
+    std::cout << "\n-----------------------------------------\n"
+              << "1. Official Shelter Login\n2. Register New Shelter Admin\nEnter Choice: ";
+    std::cin >> subChoice;
 
-    if (subChoice == 2) {
+    if (subChoice == 2)
+    {
         auth.registerOfficial(SHELTER);
     }
 
     User shelterUser = auth.loginOfficial(SHELTER);
-    if (shelterUser.role != SHELTER) return;
+    if (shelterUser.role != SHELTER)
+        return;
 
-    int choice;
-    do {
-        cout << "\n=========================================\n";
-        cout << "       SHELTER DASHBOARD (" << shelterUser.username << ")\n";
-        cout << "=========================================\n";
-        cout << "1. View All Shelters Capacity Status\n";
-        cout << "2. Add New Shelter\n";
-        cout << "3. Add Resource Inventory\n";
-        cout << "4. View Resources Inventory\n";
-        cout << "5. Logout to Main Portal\n";
-        cout << "Enter Choice: ";
-        cin >> choice;
+    int choice = 0;
+    do
+    {
+        std::cout << "\n=========================================\n"
+                  << "       SHELTER DASHBOARD (" << shelterUser.username << ")\n"
+                  << "=========================================\n"
+                  << "1. View All Shelters Capacity Status\n"
+                  << "2. Add New Shelter\n"
+                  << "3. Add Resource Inventory\n"
+                  << "4. View Resources Inventory\n"
+                  << "5. Logout to Main Portal\n"
+                  << "Enter Choice: ";
+        std::cin >> choice;
 
-        if (choice == 1) {
+        switch (choice)
+        {
+        case 1:
             resq.showShelters();
-        }
-        else if (choice == 2) {
+            break;
+        case 2:
             resq.addShelter();
-        }
-        else if (choice == 3) {
+            break;
+        case 3:
             resq.addResource();
-        }
-        else if (choice == 4) {
+            break;
+        case 4:
             resq.showResources();
+            break;
+        case 5:
+            break;
+        default:
+            std::cout << "\n[-] Invalid Choice! Try again.\n";
+            break;
         }
     } while (choice != 5);
 }
 
-int main() {
+int main()
+{
     AuthManager auth;
     GarudaResQ resq;
 
-    int mainChoice;
-    while (true) {
-        cout << "\n=========================================\n";
-        cout << "       GARUDA RESQ BACKEND ENGINE        \n";
-        cout << "=========================================\n";
-        cout << "1. Citizen Portal\n";
-        cout << "2. NGO Portal\n";
-        cout << "3. Shelter Admin Portal\n";
-        cout << "4. Exit System\n";
-        cout << "Select Access Portal: ";
-        cin >> mainChoice;
+    int mainChoice = 0;
+    while (true)
+    {
+        std::cout << "\n=========================================\n"
+                  << "       GARUDA RESQ BACKEND ENGINE        \n"
+                  << "=========================================\n"
+                  << "1. Citizen Portal\n"
+                  << "2. NGO Portal\n"
+                  << "3. Shelter Admin Portal\n"
+                  << "4. Exit System\n"
+                  << "Select Access Portal: ";
+        std::cin >> mainChoice;
 
-        switch (mainChoice) {
-            case 1:
-                runCitizenPortal(resq, auth);
-                break;
-            case 2:
-                runNGOPortal(resq, auth);
-                break;
-            case 3:
-                runShelterPortal(resq, auth);
-                break;
-            case 4:
-                cout << "\nShutting down GarudaResQ backend system. Stay Safe!\n";
-                return 0;
-            default:
-                cout << "\n[-] Invalid Choice! Please select between 1 and 4.\n";
+        switch (mainChoice)
+        {
+        case 1:
+            runCitizenPortal(resq, auth);
+            break;
+        case 2:
+            runNGOPortal(resq, auth);
+            break;
+        case 3:
+            runShelterPortal(resq, auth);
+            break;
+        case 4:
+            std::cout << "\nShutting down GarudaResQ backend system. Stay Safe!\n";
+            return 0;
+        default:
+            std::cout << "\n[-] Invalid Choice! Please select between 1 and 4.\n";
+            break;
         }
     }
     return 0;
