@@ -66,22 +66,36 @@ public:
 
     bool removeByID(int requestID)
     {
-        QueueNode* current = front;
-        QueueNode* previous = nullptr;
-        while (current != nullptr)
+    QueueNode* current = front;
+    QueueNode* previous = nullptr;
+
+    while (current != nullptr)
+    {
+        if (current->request.getRequestID() == requestID)
         {
-            if (current->request.getRequestID() == requestID)
+            if (previous == nullptr)
             {
-                if (previous == nullptr) front = current->next;
-                else previous->next = current->next;
-                if (current == rear) rear = previous;
-                delete current;
-                return true;
+                front = current->next;
             }
-            previous = current;
-            current = current->next;
+            else
+            {
+                previous->next = current->next;
+            }
+
+            if (current == rear)
+            {
+                rear = previous;
+            }
+
+            delete current;
+            return true;
         }
-        return false;
+
+        previous = current;
+        current = current->next;
+    }
+
+    return false;
     }
 
     void displayQueue() const
