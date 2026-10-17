@@ -4,24 +4,18 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Shelter
 {
 private:
     int shelterID;
-    string location;
+    std::string location;
     int capacity;
     int occupancy;
 
 public:
-
-    Shelter(int id, string loc, int cap)
+    Shelter(int id, const std::string &loc, int cap)
+        : shelterID(id), location(loc), capacity(cap < 0 ? 0 : cap), occupancy(0)
     {
-        shelterID = id;
-        location = loc;
-        capacity = cap < 0 ? 0 : cap;
-        occupancy = 0;
     }
 
     int getShelterID() const
@@ -29,7 +23,7 @@ public:
         return shelterID;
     }
 
-    string getLocation() const
+    std::string getLocation() const
     {
         return location;
     }
@@ -51,37 +45,38 @@ public:
 
     bool hasSpace(int people) const
     {
-        return people >= 0 && occupancy + people <= capacity;
+        return people >= 0 && (occupancy + people) <= capacity;
     }
 
     void addPeople(int people)
     {
         if (people <= 0)
         {
-            cout << "\nNumber of people must be positive.";
+            std::cout << "\nNumber of people must be positive.";
             return;
         }
+
         if (hasSpace(people))
         {
             occupancy += people;
-            cout << "\nPeople added to shelter successfully.";
+            std::cout << "\nPeople added to shelter successfully.";
         }
         else
         {
-            cout << "\nNot enough space in shelter.";
+            std::cout << "\nNot enough space in shelter.";
         }
     }
 
     void display() const
     {
-        cout << "\n----------------------------------------";
-        cout << "\nShelter ID       : " << shelterID;
-        cout << "\nLocation         : " << location;
-        cout << "\nCapacity         : " << capacity;
-        cout << "\nCurrent Occupancy: " << occupancy;
-        cout << "\nAvailable Space  : " << getAvailableSpace();
-        cout << "\n----------------------------------------\n";
+        std::cout << "\n----------------------------------------"
+                  << "\nShelter ID       : " << shelterID
+                  << "\nLocation         : " << location
+                  << "\nCapacity         : " << capacity
+                  << "\nCurrent Occupancy: " << occupancy
+                  << "\nAvailable Space  : " << getAvailableSpace()
+                  << "\n----------------------------------------\n";
     }
 };
 
-#endif 
+#endif
