@@ -3,45 +3,43 @@
 
 #include <iostream>
 #include <string>
-using namespace std;
 
 class Victim
 {
 private:
     int victimID;
-    string name;
-    string location;
+    std::string name;
+    std::string location;
     int peopleAffected;
     int injuryLevel;
-    string disasterType;
-    string requiredResource;
+    std::string disasterType;
+    std::string requiredResource;
 
 public:
-    Victim() : victimID(0), peopleAffected(0), injuryLevel(1) {}
+    Victim()
+        : victimID(0), peopleAffected(0), injuryLevel(1) {}
 
-    Victim(int id, string n, string loc, int people,
-           int injury, string disaster, string resource)
-    {
-        victimID = id;
-        name = n;
-        location = loc;
-        peopleAffected = people < 0 ? 0 : people;
-        injuryLevel = (injury < 1 || injury > 5) ? 1 : injury;
-        disasterType = disaster;
-        requiredResource = resource;
-    }
+    Victim(int id, const std::string &n, const std::string &loc, int people,
+           int injury, const std::string &disaster, const std::string &resource)
+        : victimID(id),
+          name(n),
+          location(loc),
+          peopleAffected(people < 0 ? 0 : people),
+          injuryLevel((injury < 1 || injury > 5) ? 1 : injury),
+          disasterType(disaster),
+          requiredResource(resource) {}
 
     int getID() const
     {
         return victimID;
     }
 
-    string getName() const
+    std::string getName() const
     {
         return name;
     }
 
-    string getLocation() const
+    std::string getLocation() const
     {
         return location;
     }
@@ -56,12 +54,12 @@ public:
         return injuryLevel;
     }
 
-    string getDisasterType() const
+    std::string getDisasterType() const
     {
         return disasterType;
     }
 
-    string getRequiredResource() const
+    std::string getRequiredResource() const
     {
         return requiredResource;
     }
@@ -69,25 +67,22 @@ public:
     int calculatePriority() const
     {
         int priority = (injuryLevel * 10) + peopleAffected;
-
-        if (priority > 100)
-            priority = 100;
-
-        return priority;
+        return (priority > 100) ? 100 : priority;
     }
 
     void display() const
     {
-        cout << "\n----------------------------------------\n";
-        cout << "Victim ID        : " << victimID << endl;
-        cout << "Name             : " << name << endl;
-        cout << "Location         : " << location << endl;
-        cout << "People Affected  : " << peopleAffected << endl;
-        cout << "Injury Level     : " << injuryLevel << "/5" << endl;
-        cout << "Disaster Type    : " << disasterType << endl;
-        cout << "Required Resource: " << requiredResource << endl;
-        cout << "Priority         : " << calculatePriority() << endl;
-        cout << "----------------------------------------\n";
+        std::cout << "\n----------------------------------------\n"
+                  << "Victim ID        : " << victimID << "\n"
+                  << "Name             : " << name << "\n"
+                  << "Location         : " << location << "\n"
+                  << "People Affected  : " << peopleAffected << "\n"
+                  << "Injury Level     : " << injuryLevel << "/5\n"
+                  << "Disaster Type    : " << disasterType << "\n"
+                  << "Required Resource: " << requiredResource << "\n"
+                  << "Priority         : " << calculatePriority() << "\n"
+                  << "----------------------------------------\n";
     }
 };
-#endif 
+
+#endif
