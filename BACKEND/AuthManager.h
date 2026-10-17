@@ -30,7 +30,7 @@ public:
         users["ngo_admin"] = {"ngo_admin", "ngo123", NGO, 0};
         users["shelter_admin"] = {"shelter_admin", "shelter123", SHELTER, 0};
     }
-
+    // This function is for identification
     User registerCitizen() {
         User u;
         u.role = CITIZEN;
@@ -46,7 +46,7 @@ public:
         cout << "[+] Welcome Citizen " << u.username << "!\n";
         return u;
     }
-
+    // This function is for Registration 
     bool registerOfficial(UserRole role) {
         string uname, pwd;
         cout << "\n====================================\n";
@@ -65,7 +65,7 @@ public:
         cout << "[+] Registration successful! You Can login.\n";
         return true;
     }
-
+    // This function is for login
     User loginOfficial(UserRole expectedRole) {
         string uname, pwd;
         User failedUser = {"", "", NONE, 0};
