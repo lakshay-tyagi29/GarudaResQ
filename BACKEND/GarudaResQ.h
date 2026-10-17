@@ -207,6 +207,38 @@ public:
 
         std::cout << "\nRescue team added successfully.\n";
     }
+    void makeRescueTeamAvailable()
+    {
+    if (rescueTeams.empty())
+    {
+        std::cout << "\nNo rescue teams available.\n";
+        return;
+    }
+
+    int id;
+
+    std::cout << "\nEnter Team ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < rescueTeams.size(); i++)
+    {
+        if (rescueTeams[i].getTeamID() == id)
+        {
+            if (rescueTeams[i].isAvailable())
+            {
+                std::cout << "\nTeam is already available.\n";
+                return;
+            }
+
+            rescueTeams[i].makeAvailable();
+
+            std::cout << "\nRescue team is now available.\n";
+            return;
+        }
+    }
+
+    std::cout << "\nTeam ID not found.\n";
+    }
 
     void showRescueTeams()
     {
