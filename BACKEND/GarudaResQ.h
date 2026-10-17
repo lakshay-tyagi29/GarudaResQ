@@ -471,12 +471,48 @@ public:
         }
 
         std::cout << "\n========== RESOURCES ==========\n";
-
-        for (auto &resource : resources)
+        for (int i = 0; i < resources.size(); i++)
         {
-            resource.display();
+            resources[i].display();
+        }
+        
+    }
+    void distributeResource()
+    {
+    if (resources.empty())
+    {
+        std::cout << "\nNo resources available.\n";
+        return;
+    }
+
+    int id;
+    int amount;
+
+    std::cout << "\nEnter Resource ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < resources.size(); i++)
+    {
+        if (resources[i].getResourceID() == id)
+        {
+            std::cout << "Available quantity: "
+                      << resources[i].getQuantity() << "\n";
+
+            std::cout << "Enter quantity to distribute: ";
+            std::cin >> amount;
+
+            resources[i].distribute(amount);
+
+            std::cout << "\nRemaining quantity: "
+                      << resources[i].getQuantity() << "\n";
+
+            return;
         }
     }
+
+    std::cout << "\nResource ID not found.\n";
+    }
+
 
     void addRoad()
     {
