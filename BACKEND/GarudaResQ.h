@@ -281,10 +281,21 @@ public:
 
         std::cout << "Location: ";
         std::getline(std::cin, location);
-
+        if (location.empty())
+        {
+         std::cout << "\nLocation cannot be empty.\n";
+         return;
+        }
         std::cout << "Capacity: ";
         std::cin >> capacity;
-
+        for (size_t i = 0; i < shelters.size(); i++)
+        {
+         if (shelters[i].getShelterID() == id)
+         {
+          std::cout << "\nShelter ID already exists.\n";
+          return;
+         }
+        }
         Shelter shelter(id, location, capacity);
 
         shelters.push_back(shelter);
