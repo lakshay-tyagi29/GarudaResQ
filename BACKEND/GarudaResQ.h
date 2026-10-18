@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
 
 #include "PriorityManager.h"
 #include "RescueTeam.h"
@@ -23,6 +24,11 @@ private:
     std::vector<Shelter> shelters;
     std::vector<Resource> resources;
     RouteManager routeManager;
+
+    void clearBuffer()
+    {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 
 public:
 
@@ -44,8 +50,7 @@ public:
 
         std::cout << "Victim ID: ";
         std::cin >> victimID;
-
-        std::cin.ignore();
+        clearBuffer();
 
         std::cout << "Victim Name: ";
         std::getline(std::cin, name);
@@ -58,8 +63,7 @@ public:
 
         std::cout << "Injury Level (1-5): ";
         std::cin >> injuryLevel;
-
-        std::cin.ignore();
+        clearBuffer();
 
         std::cout << "Disaster Type: ";
         std::getline(std::cin, disasterType);
@@ -192,8 +196,7 @@ public:
 
         std::cout << "Team ID: ";
         std::cin >> id;
-
-        std::cin.ignore();
+        clearBuffer();
 
         std::cout << "Team Name: ";
         std::getline(std::cin, name);
@@ -267,8 +270,7 @@ public:
 
         std::cout << "Shelter ID: ";
         std::cin >> id;
-
-        std::cin.ignore();
+        clearBuffer();
 
         std::cout << "Location: ";
         std::getline(std::cin, location);
@@ -303,7 +305,7 @@ public:
                 std::string location;
                 int capacity;
 
-                std::cin >> std::ws;
+                clearBuffer();
 
                 std::cout << "Enter new location: ";
                 std::getline(std::cin, location);
@@ -374,12 +376,11 @@ public:
         std::string name;
         int quantity;
 
-        std::cout << "\n========== ADD RESOURCE ==========\n";
+        std::cout << "\n========== ADD RESOURCE ==========";
 
         std::cout << "Resource ID: ";
         std::cin >> id;
-
-        std::cin.ignore();
+        clearBuffer();
 
         std::cout << "Resource Name: ";
         std::getline(std::cin, name);
@@ -451,9 +452,9 @@ public:
         std::string to;
         int distance;
 
-        std::cout << "\n========== ADD ROAD ==========\n";
+        std::cout << "\n========== ADD ROAD ==========";
 
-        std::cin >> std::ws;
+        clearBuffer();
 
         std::cout << "From Location: ";
         std::getline(std::cin, from);
@@ -477,9 +478,9 @@ public:
         std::string start;
         std::string destination;
 
-        std::cout << "\n========== FIND SHORTEST ROUTE ==========\n";
+        std::cout << "\n========== FIND SHORTEST ROUTE ==========";
 
-        std::cin >> std::ws;
+        clearBuffer();
 
         std::cout << "Start Location: ";
         std::getline(std::cin, start);
@@ -590,6 +591,7 @@ public:
                 case 16:
                     showEmergencyQueue();
                     break;
+
                 case 17:
                     updateShelter();
                     break;
