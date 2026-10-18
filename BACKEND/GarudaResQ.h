@@ -554,8 +554,13 @@ public:
             std::cout << "\n0. Exit";
 
             std::cout << "\n\nEnter choice: ";
-            std::cin >> choice;
-
+            if (!(std::cin >> choice))
+            {
+               std::cin.clear();
+               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+               std::cout << "\nInvalid input. Please enter a number.\n";
+               continue;
+            }
             switch (choice)
             {
                 case 1:
