@@ -405,7 +405,19 @@ public:
 
         std::cout << "Quantity: ";
         std::cin >> quantity;
-
+        if (quantity < 0)
+        {
+         std::cout << "\nQuantity cannot be negative.\n";
+         return;
+        }
+        for (size_t i = 0; i < resources.size(); i++)
+        {
+         if (resources[i].getResourceID() == id)
+         {
+           std::cout << "\nResource ID already exists.\n";
+           return;
+         }
+        }
         Resource resource(id, name, quantity);
 
         resources.push_back(resource);
