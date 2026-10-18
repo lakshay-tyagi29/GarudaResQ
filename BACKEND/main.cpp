@@ -152,9 +152,12 @@ void runShelterPortal(GarudaResQ &resq, AuthManager &auth)
                   << "=========================================\n"
                   << "1. View All Shelters Capacity Status\n"
                   << "2. Add New Shelter\n"
-                  << "3. Add Resource Inventory\n"
-                  << "4. View Resources Inventory\n"
-                  << "5. Logout to Main Portal\n"
+                  << "3. Update Shelter Details\n"
+                  << "4. Assign People / Occupancy to Shelter\n"
+                  << "5. Add Resource Inventory\n"
+                  << "6. View Resources Inventory\n"
+                  << "7. Distribute Resource\n"
+                  << "8. Logout to Main Portal\n"
                   << "Enter Choice: ";
         std::cin >> choice;
 
@@ -167,18 +170,27 @@ void runShelterPortal(GarudaResQ &resq, AuthManager &auth)
             resq.addShelter();
             break;
         case 3:
-            resq.addResource();
+            resq.updateShelter();
             break;
         case 4:
-            resq.showResources();
+            resq.assignPeopleToShelter();
             break;
         case 5:
+            resq.addResource();
+            break;
+        case 6:
+            resq.showResources();
+            break;
+        case 7:
+            resq.distributeResource();
+            break;
+        case 8:
             break;
         default:
             std::cout << "\n[-] Invalid Choice! Try again.\n";
             break;
         }
-    } while (choice != 5);
+    } while (choice != 8);
 }
 
 int main()
