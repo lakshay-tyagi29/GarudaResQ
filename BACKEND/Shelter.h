@@ -66,6 +66,20 @@ public:
             std::cout << "\nNot enough space in shelter.";
         }
     }
+    bool updateShelter(const std::string &newLocation, int newCapacity)
+    {
+    if (newLocation.empty() || newCapacity < occupancy)
+    {
+        std::cout << "\nInvalid location or capacity.";
+        return false;
+    }
+
+    location = newLocation;
+    capacity = newCapacity;
+
+    std::cout << "\nShelter updated successfully.";
+    return true;
+    }
 
     bool updateShelter(const std::string &newLocation, int newCapacity)
     {

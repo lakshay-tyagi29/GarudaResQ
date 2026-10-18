@@ -132,6 +132,7 @@ public:
 
         bool teamAssigned = false;
 
+<<<<<<< HEAD
         for (size_t i = 0; i < rescueTeams.size(); i++)
         {
             if (rescueTeams[i].isAvailable())
@@ -141,16 +142,32 @@ public:
                 std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
                 std::cout << "\nEmergency Request ID: "
                           << request.getRequestID();
+=======
+        for (int i = 0; i < rescueTeams.size(); i++)
+        {
+        if (rescueTeams[i].isAvailable())
+        {
+        EmergencyRequest request = priorityManager.getHighestPriority();
 
-                std::cout << "\nVictim: "
-                          << request.getVictim().getName();
+        std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
+        std::cout << "\nEmergency Request ID: "
+                  << request.getRequestID();
 
-                std::cout << "\nLocation: "
-                          << request.getVictim().getLocation();
+        std::cout << "\nVictim: "
+                  << request.getVictim().getName();
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
 
-                std::cout << "\nPriority: "
-                          << request.getPriority();
+        std::cout << "\nLocation: "
+                  << request.getVictim().getLocation();
 
+        std::cout << "\nPriority: "
+                  << request.getPriority();
+
+        std::cout << "\n\nRescue Team Assigned:";
+        std::cout << "\nTeam ID: "
+                  << rescueTeams[i].getTeamID();
+
+<<<<<<< HEAD
                 std::cout << "\n\nRescue Team Assigned:";
                 std::cout << "\nTeam ID: "
                           << rescueTeams[i].getTeamID();
@@ -162,17 +179,35 @@ public:
                           << rescueTeams[i].getLocation();
 
                 rescueTeams[i].assignTeam();
+=======
+        std::cout << "\nTeam Name: "
+                  << rescueTeams[i].getTeamName();
 
-                priorityManager.removeHighestPriority();
-                emergencyList.markProcessed(request.getRequestID());
-                emergencyQueue.removeByID(request.getRequestID());
+        std::cout << "\nTeam Location: "
+                  << rescueTeams[i].getLocation();
 
+        rescueTeams[i].assignTeam();
+
+        priorityManager.removeHighestPriority();
+        emergencyList.markProcessed(request.getRequestID());
+        emergencyQueue.removeByID(request.getRequestID());
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
+
+        std::cout << "\n\nEmergency assigned successfully.";
+        std::cout << "\nRescue team status: Assigned\n";
+
+<<<<<<< HEAD
                 std::cout << "\n\nEmergency assigned successfully.";
                 std::cout << "\nRescue team status: Assigned\n";
 
                 teamAssigned = true;
                 break;
             }
+=======
+        teamAssigned = true;
+        break;
+        }
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
         }
 
         if (!teamAssigned)
@@ -206,6 +241,38 @@ public:
         rescueTeams.push_back(team);
 
         std::cout << "\nRescue team added successfully.\n";
+    }
+    void makeRescueTeamAvailable()
+    {
+    if (rescueTeams.empty())
+    {
+        std::cout << "\nNo rescue teams available.\n";
+        return;
+    }
+
+    int id;
+
+    std::cout << "\nEnter Team ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < rescueTeams.size(); i++)
+    {
+        if (rescueTeams[i].getTeamID() == id)
+        {
+            if (rescueTeams[i].isAvailable())
+            {
+                std::cout << "\nTeam is already available.\n";
+                return;
+            }
+
+            rescueTeams[i].makeAvailable();
+
+            std::cout << "\nRescue team is now available.\n";
+            return;
+        }
+    }
+
+    std::cout << "\nTeam ID not found.\n";
     }
 
     void makeRescueTeamAvailable()
@@ -251,9 +318,15 @@ public:
 
         std::cout << "\n========== RESCUE TEAMS ==========\n";
 
+<<<<<<< HEAD
         for (size_t i = 0; i < rescueTeams.size(); i++)
         {
             rescueTeams[i].display();
+=======
+       for (int i = 0; i < rescueTeams.size(); i++)
+        {
+           rescueTeams[i].display();
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
         }
     }
 
@@ -282,6 +355,74 @@ public:
 
         std::cout << "\nShelter added successfully.\n";
     }
+    void updateShelter()
+    {
+    if (shelters.empty())
+    {
+        std::cout << "\nNo shelters available to update.\n";
+        return;
+    }
+
+    int id;
+
+    std::cout << "\nEnter Shelter ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            std::string location;
+            int capacity;
+
+            std::cin >> std::ws;
+
+            std::cout << "Enter new location: ";
+            std::getline(std::cin, location);
+
+            std::cout << "Enter new capacity: ";
+            std::cin >> capacity;
+
+            shelters[i].updateShelter(location, capacity);
+            return;
+        }
+    }
+
+    std::cout << "\nShelter ID not found.\n";
+    }
+    void assignPeopleToShelter()
+    {
+    if (shelters.empty())
+    {
+        std::cout << "\nNo shelters available.\n";
+        return;
+    }
+
+    int id;
+    int people;
+
+    std::cout << "\nEnter Shelter ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < shelters.size(); i++)
+    {
+        if (shelters[i].getShelterID() == id)
+        {
+            std::cout << "Enter number of people: ";
+            std::cin >> people;
+
+            shelters[i].addPeople(people);
+
+            std::cout << "\nAvailable space: "
+                      << shelters[i].getAvailableSpace() << "\n";
+
+            return;
+        }
+    }
+
+    std::cout << "\nShelter ID not found.\n";
+    }
+
 
     void updateShelter()
     {
@@ -362,9 +503,15 @@ public:
 
         std::cout << "\n========== SHELTERS ==========\n";
 
+<<<<<<< HEAD
         for (size_t i = 0; i < shelters.size(); i++)
         {
             shelters[i].display();
+=======
+        for (int i = 0; i < shelters.size(); i++)
+        {
+          shelters[i].display();
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
         }
     }
 
@@ -403,6 +550,7 @@ public:
         }
 
         std::cout << "\n========== RESOURCES ==========\n";
+<<<<<<< HEAD
         for (size_t i = 0; i < resources.size(); i++)
         {
             resources[i].display();
@@ -445,6 +593,51 @@ public:
         std::cout << "\nResource ID not found.\n";
     }
 
+=======
+        for (int i = 0; i < resources.size(); i++)
+        {
+            resources[i].display();
+        }
+        
+    }
+    void distributeResource()
+    {
+    if (resources.empty())
+    {
+        std::cout << "\nNo resources available.\n";
+        return;
+    }
+
+    int id;
+    int amount;
+
+    std::cout << "\nEnter Resource ID: ";
+    std::cin >> id;
+
+    for (int i = 0; i < resources.size(); i++)
+    {
+        if (resources[i].getResourceID() == id)
+        {
+            std::cout << "Available quantity: "
+                      << resources[i].getQuantity() << "\n";
+
+            std::cout << "Enter quantity to distribute: ";
+            std::cin >> amount;
+
+            resources[i].distribute(amount);
+
+            std::cout << "\nRemaining quantity: "
+                      << resources[i].getQuantity() << "\n";
+
+            return;
+        }
+    }
+
+    std::cout << "\nResource ID not found.\n";
+    }
+
+
+>>>>>>> 4047016abed69c70540c6e52da56a4f56d5f5b9c
     void addRoad()
     {
         std::string from;
