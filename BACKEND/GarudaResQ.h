@@ -132,14 +132,13 @@ public:
 
         bool teamAssigned = false;
 
-        for (auto &team : rescueTeams)
+        for (size_t i = 0; i < rescueTeams.size(); i++)
         {
-            if (team.isAvailable())
+            if (rescueTeams[i].isAvailable())
             {
                 EmergencyRequest request = priorityManager.getHighestPriority();
 
                 std::cout << "\n========== EMERGENCY ASSIGNMENT ==========\n";
-
                 std::cout << "\nEmergency Request ID: "
                           << request.getRequestID();
 
@@ -154,15 +153,15 @@ public:
 
                 std::cout << "\n\nRescue Team Assigned:";
                 std::cout << "\nTeam ID: "
-                          << team.getTeamID();
+                          << rescueTeams[i].getTeamID();
 
                 std::cout << "\nTeam Name: "
-                          << team.getTeamName();
+                          << rescueTeams[i].getTeamName();
 
                 std::cout << "\nTeam Location: "
-                          << team.getLocation();
+                          << rescueTeams[i].getLocation();
 
-                team.assignTeam();
+                rescueTeams[i].assignTeam();
 
                 priorityManager.removeHighestPriority();
                 emergencyList.markProcessed(request.getRequestID());
@@ -172,7 +171,6 @@ public:
                 std::cout << "\nRescue team status: Assigned\n";
 
                 teamAssigned = true;
-
                 break;
             }
         }
@@ -210,6 +208,39 @@ public:
         std::cout << "\nRescue team added successfully.\n";
     }
 
+    void makeRescueTeamAvailable()
+    {
+        if (rescueTeams.empty())
+        {
+            std::cout << "\nNo rescue teams available.\n";
+            return;
+        }
+
+        int id;
+
+        std::cout << "\nEnter Team ID: ";
+        std::cin >> id;
+
+        for (size_t i = 0; i < rescueTeams.size(); i++)
+        {
+            if (rescueTeams[i].getTeamID() == id)
+            {
+                if (rescueTeams[i].isAvailable())
+                {
+                    std::cout << "\nTeam is already available.\n";
+                    return;
+                }
+
+                rescueTeams[i].makeAvailable();
+
+                std::cout << "\nRescue team is now available.\n";
+                return;
+            }
+        }
+
+        std::cout << "\nTeam ID not found.\n";
+    }
+
     void showRescueTeams()
     {
         if (rescueTeams.empty())
@@ -220,9 +251,9 @@ public:
 
         std::cout << "\n========== RESCUE TEAMS ==========\n";
 
-        for (auto &team : rescueTeams)
+        for (size_t i = 0; i < rescueTeams.size(); i++)
         {
-            team.display();
+            rescueTeams[i].display();
         }
     }
 
@@ -252,6 +283,75 @@ public:
         std::cout << "\nShelter added successfully.\n";
     }
 
+    void updateShelter()
+    {
+        if (shelters.empty())
+        {
+            std::cout << "\nNo shelters available to update.\n";
+            return;
+        }
+
+        int id;
+
+        std::cout << "\nEnter Shelter ID: ";
+        std::cin >> id;
+
+        for (size_t i = 0; i < shelters.size(); i++)
+        {
+            if (shelters[i].getShelterID() == id)
+            {
+                std::string location;
+                int capacity;
+
+                std::cin >> std::ws;
+
+                std::cout << "Enter new location: ";
+                std::getline(std::cin, location);
+
+                std::cout << "Enter new capacity: ";
+                std::cin >> capacity;
+
+                shelters[i].updateShelter(location, capacity);
+                return;
+            }
+        }
+
+        std::cout << "\nShelter ID not found.\n";
+    }
+
+    void assignPeopleToShelter()
+    {
+        if (shelters.empty())
+        {
+            std::cout << "\nNo shelters available.\n";
+            return;
+        }
+
+        int id;
+        int people;
+
+        std::cout << "\nEnter Shelter ID: ";
+        std::cin >> id;
+
+        for (size_t i = 0; i < shelters.size(); i++)
+        {
+            if (shelters[i].getShelterID() == id)
+            {
+                std::cout << "Enter number of people: ";
+                std::cin >> people;
+
+                shelters[i].addPeople(people);
+
+                std::cout << "\nAvailable space: "
+                          << shelters[i].getAvailableSpace() << "\n";
+
+                return;
+            }
+        }
+
+        std::cout << "\nShelter ID not found.\n";
+    }
+
     void showShelters()
     {
         if (shelters.empty())
@@ -262,80 +362,10 @@ public:
 
         std::cout << "\n========== SHELTERS ==========\n";
 
-        for (auto &shelter : shelters)
+        for (size_t i = 0; i < shelters.size(); i++)
         {
-            shelter.display();
+            shelters[i].display();
         }
-    }
-
-    void updateShelter()
-    {
-    if (shelters.empty())
-    {
-        cout << "\nNo shelters available to update.\n";
-        return;
-    }
-
-    int id;
-
-    cout << "\nEnter Shelter ID: ";
-    cin >> id;
-
-    for (int i = 0; i < shelters.size(); i++)
-    {
-        if (shelters[i].getShelterID() == id)
-        {
-            string location;
-            int capacity;
-
-            cin.ignore();
-
-            cout << "Enter new location: ";
-            getline(cin, location);
-
-            cout << "Enter new capacity: ";
-            cin >> capacity;
-
-            shelters[i].updateShelter(location, capacity);
-            return;
-        }
-    }
-
-    cout << "\nShelter ID not found.\n";
-
-    }
-
-    void assignPeopleToShelter()
-    {
-    if (shelters.empty())
-    {
-        cout << "\nNo shelters available.\n";
-        return;
-    }
-
-    int id;
-    int people;
-
-    cout << "\nEnter Shelter ID: ";
-    cin >> id;
-
-    for (int i = 0; i < shelters.size(); i++)
-    {
-        if (shelters[i].getShelterID() == id)
-        {
-            cout << "Enter number of people: ";
-            cin >> people;
-
-            shelters[i].addPeople(people);
-
-            cout << "\nAvailable space: "
-                 << shelters[i].getAvailableSpace() << "\n";
-
-            return;
-        }
-    }
-
-    cout << "\nShelter ID not found.\n";
     }
 
     void addResource()
@@ -373,11 +403,46 @@ public:
         }
 
         std::cout << "\n========== RESOURCES ==========\n";
-
-        for (auto &resource : resources)
+        for (size_t i = 0; i < resources.size(); i++)
         {
-            resource.display();
+            resources[i].display();
         }
+    }
+
+    void distributeResource()
+    {
+        if (resources.empty())
+        {
+            std::cout << "\nNo resources available.\n";
+            return;
+        }
+
+        int id;
+        int amount;
+
+        std::cout << "\nEnter Resource ID: ";
+        std::cin >> id;
+
+        for (size_t i = 0; i < resources.size(); i++)
+        {
+            if (resources[i].getResourceID() == id)
+            {
+                std::cout << "Available quantity: "
+                          << resources[i].getQuantity() << "\n";
+
+                std::cout << "Enter quantity to distribute: ";
+                std::cin >> amount;
+
+                resources[i].distribute(amount);
+
+                std::cout << "\nRemaining quantity: "
+                          << resources[i].getQuantity() << "\n";
+
+                return;
+            }
+        }
+
+        std::cout << "\nResource ID not found.\n";
     }
 
     void addRoad()
@@ -451,6 +516,10 @@ public:
             std::cout << "\n14. Search Emergency";
             std::cout << "\n15. Sort Emergencies by Priority";
             std::cout << "\n16. Show Normal Emergency Queue";
+            std::cout << "\n17. Update Shelter";
+            std::cout << "\n18. Assign People to Shelter";
+            std::cout << "\n19. Make Rescue Team Available";
+            std::cout << "\n20. Distribute Resource";
             std::cout << "\n0. Exit";
 
             std::cout << "\n\nEnter choice: ";
@@ -520,6 +589,21 @@ public:
 
                 case 16:
                     showEmergencyQueue();
+                    break;
+                case 17:
+                    updateShelter();
+                    break;
+
+                case 18:
+                    assignPeopleToShelter();
+                    break;
+
+                case 19:
+                    makeRescueTeamAvailable();
+                    break;
+
+                case 20:
+                    distributeResource();
                     break;
 
                 case 0:
