@@ -202,7 +202,7 @@ int main()
     while (true)
     {
         std::cout << "\n=========================================\n"
-                  << "       GARUDA RESQ BACKEND ENGINE        \n"
+                  << "       GARUDARESQ        \n"
                   << "=========================================\n"
                   << "1. Citizen Portal\n"
                   << "2. NGO Portal\n"
