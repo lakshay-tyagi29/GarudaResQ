@@ -98,7 +98,7 @@ public:
                  << "\nLocation: " << temp->request.getVictim().getLocation()
                  << "\nPriority: " << temp->request.getPriority()
                  << "\nStatus: " << (temp->request.isProcessed() ? "Processed" : "Pending")
-                 << "\n-----------------------------------";
+                 << "\n-----------------------------------\n";
         }
         cout << endl;
     }

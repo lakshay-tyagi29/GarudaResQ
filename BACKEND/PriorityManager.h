@@ -57,7 +57,7 @@ public:
 
         emergencyQueue.pop();
 
-        cout << "\n===== HIGHEST PRIORITY EMERGENCY =====";
+        cout << "\n===== HIGHEST PRIORITY EMERGENCY =====\n";
 
         request.display();
 

@@ -171,7 +171,7 @@ public:
                 emergencyList.markProcessed(request.getRequestID());
                 emergencyQueue.removeByID(request.getRequestID());
 
-                std::cout << "\n\nEmergency assigned successfully.";
+                std::cout << "\n\nEmergency assigned successfully.\n";
                 std::cout << "\nRescue team status: Assigned\n";
 
                 teamAssigned = true;
@@ -376,7 +376,7 @@ public:
         std::string name;
         int quantity;
 
-        std::cout << "\n========== ADD RESOURCE ==========";
+        std::cout << "\n========== ADD RESOURCE ==========\n";
 
         std::cout << "Resource ID: ";
         std::cin >> id;
@@ -452,7 +452,7 @@ public:
         std::string to;
         int distance;
 
-        std::cout << "\n========== ADD ROAD ==========";
+        std::cout << "\n========== ADD ROAD ==========\n";
 
         clearBuffer();
 
@@ -478,7 +478,7 @@ public:
         std::string start;
         std::string destination;
 
-        std::cout << "\n========== FIND SHORTEST ROUTE ==========";
+        std::cout << "\n========== FIND SHORTEST ROUTE ==========\n";
 
         clearBuffer();
 

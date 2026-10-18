@@ -111,7 +111,7 @@ public:
             cout << "\nRequest ID: " << temp->request.getRequestID()
                  << "\nVictim: " << temp->request.getVictim().getName()
                  << "\nPriority: " << temp->request.getPriority()
-                 << "\n-----------------------------------";
+                 << "\n-----------------------------------\n";
         }
         cout << endl;
     }
