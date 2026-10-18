@@ -203,7 +203,14 @@ public:
 
         std::cout << "Location: ";
         std::getline(std::cin, location);
-
+        for (size_t i = 0; i < rescueTeams.size(); i++)
+        {
+         if (rescueTeams[i].getTeamID() == id)
+         {
+           std::cout << "\nTeam ID already exists.\n";
+           return;
+         }
+        }
         RescueTeam team(id, name, location);
 
         rescueTeams.push_back(team);
