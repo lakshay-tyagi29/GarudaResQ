@@ -13,6 +13,7 @@
 #include "RouteManager.h"
 #include "EmergencyList.h"
 #include "EmergencyQueue.h"
+#include "Database.h"
 
 class GarudaResQ
 {
@@ -24,6 +25,7 @@ private:
     std::vector<Shelter> shelters;
     std::vector<Resource> resources;
     RouteManager routeManager;
+    Database db;
 
     void clearBuffer()
     {
@@ -31,68 +33,157 @@ private:
     }
 
 public:
-
-    void reportEmergency()
+    GarudaResQ()
     {
-        int requestID;
-        int victimID;
-        std::string name;
-        std::string location;
-        int peopleAffected;
-        int injuryLevel;
-        std::string disasterType;
-        std::string requiredResource;
-
-        std::cout << "\n========== REPORT EMERGENCY ==========\n";
-
-        std::cout << "Request ID: ";
-        std::cin >> requestID;
-
-        std::cout << "Victim ID: ";
-        std::cin >> victimID;
-        clearBuffer();
-
-        std::cout << "Victim Name: ";
-        std::getline(std::cin, name);
-
-        std::cout << "Location: ";
-        std::getline(std::cin, location);
-
-        std::cout << "People Affected: ";
-        std::cin >> peopleAffected;
-
-        std::cout << "Injury Level (1-5): ";
-        std::cin >> injuryLevel;
-        clearBuffer();
-
-        std::cout << "Disaster Type: ";
-        std::getline(std::cin, disasterType);
-
-        std::cout << "Required Resource: ";
-        std::getline(std::cin, requiredResource);
-
-        Victim victim(
-            victimID,
-            name,
-            location,
-            peopleAffected,
-            injuryLevel,
-            disasterType,
-            requiredResource
-        );
-
-        EmergencyRequest request(requestID, victim);
-
-        if (emergencyList.containsRequestID(requestID))
-        {
-            std::cout << "\nRequest ID already exists. Please use a unique ID.\n";
-            return;
-        }
-
-        priorityManager.addEmergency(request);
-        emergencyList.addEmergency(request);
-        emergencyQueue.enqueue(request);
+    db.connect();
     }
+    void reportEmergency()
+{
+    int requestID;
+    int peopleAffected;
+    int injuryLevel;
+
+    std::string name;
+    std::string location;
+    std::string disasterType;
+    std::string requiredResource;
+    std::string description;
+    std::string contactNumber;
+
+    std::cout << "\n========== REPORT EMERGENCY ==========\n";
+
+    std::cout << "Request ID: ";
+    std::cin >> requestID;
+
+    if (emergencyList.containsRequestID(requestID))
+    {
+        std::cout << "\nRequest ID already exists.\n";
+        return;
+    }
+
+    clearBuffer();
+
+    std::cout << "Victim Name: ";
+    std::getline(std::cin, name);
+
+    std::cout << "Location: ";
+    std::getline(std::cin, location);
+
+    std::cout << "People Affected: ";
+    std::cin >> peopleAffected;
+
+    std::cout << "Injury Level (1-5): ";
+    std::cin >> injuryLevel;
+    clearBuffer();
+
+    std::cout << "Disaster Type: ";
+    std::getline(std::cin, disasterType);
+
+    std::cout << "Required Resource: ";
+    std::getline(std::cin, requiredResource);
+
+    std::cout << "Contact Number: ";
+    std::getline(std::cin, contactNumber);
+
+    std::cout << "Description: ";
+    std::getline(std::cin, description);
+
+    Victim temp(
+        0,
+        name,
+        location,
+        peopleAffected,
+        injuryLevel,
+        disasterType,
+        requiredResource
+    );
+
+    int priorityScore = temp.calculatePriority();
+
+    std::string priority;
+
+    if (priorityScore >= 80)
+        priority = "critical";
+    else if (priorityScore >= 60)
+        priority = "high";
+    else if (priorityScore >= 40)
+        priority = "medium";
+    else
+        priority = "low";
+    std::string category;
+
+if (disasterType == "flood" || disasterType == "Flood")
+    category = "Flood";
+else if (disasterType == "landslide" || disasterType == "Landslide")
+    category = "Landslide";
+else if (disasterType == "structural damage" || disasterType == "Structural Damage")
+    category = "Structural Damage";
+else if (disasterType == "medical" || disasterType == "Medical")
+    category = "Medical";
+else
+{
+    cout << "\nInvalid Category! Please enter Flood, Landslide, Structural Damage or Medical.\n";
+    return;
+}
+
+    long long victimID = db.insertVictim(
+        name.c_str(),
+        location.c_str(),
+        peopleAffected,
+        injuryLevel,
+        category.c_str(),
+        requiredResource.c_str()
+    );
+
+    if (victimID == -1)
+    {
+        std::cout << "\nVictim database insertion failed.\n";
+        return;
+    }
+
+    if (victimID > std::numeric_limits<int>::max())
+    {
+        std::cout << "\nGenerated Victim ID exceeds C++ Victim ID limit.\n";
+        return;
+    }
+
+    Victim victim(
+        static_cast<int>(victimID),
+        name,
+        location,
+        peopleAffected,
+        injuryLevel,
+        disasterType,
+        requiredResource
+    );
+
+    bool saved = db.insertEmergencyRequest(
+        std::to_string(requestID).c_str(),
+        victimID,
+        name.c_str(),
+        location.c_str(),
+        disasterType.c_str(),
+        priority.c_str(),
+        priorityScore,
+        peopleAffected,
+        description.c_str(),
+        contactNumber.c_str()
+    );
+
+    if (!saved)
+    {
+        std::cout << "\nEmergency request database insertion failed.\n";
+        return;
+    }
+
+    EmergencyRequest request(requestID, victim);
+
+    priorityManager.addEmergency(request);
+    emergencyList.addEmergency(request);
+    emergencyQueue.enqueue(request);
+
+    std::cout << "\nEmergency Reported Successfully!\n";
+}
 
     void showEmergencies()
     {
@@ -164,7 +255,14 @@ public:
 
                 std::cout << "\nTeam Location: "
                           << rescueTeams[i].getLocation();
-
+                if (!db.updateRescueTeamStatus(
+        rescueTeams[i].getTeamID(),
+        false,
+        request.getRequestID()))
+{
+    std::cout << "\nDatabase update failed.\n";
+    return;
+}
                 rescueTeams[i].assignTeam();
 
                 priorityManager.removeHighestPriority();
@@ -211,8 +309,13 @@ public:
            return;
          }
         }
-        RescueTeam team(id, name, location);
 
+        RescueTeam team(id, name, location);
+        if (!db.insertRescueTeam(id, name.c_str(), location.c_str()))
+{
+    std::cout << "\nDatabase insertion failed.\n";
+    return;
+}
         rescueTeams.push_back(team);
 
         std::cout << "\nRescue team added successfully.\n";
@@ -240,7 +343,11 @@ public:
                     std::cout << "\nTeam is already available.\n";
                     return;
                 }
-
+                if (!db.updateRescueTeamStatus(id, true))
+{
+    std::cout << "\nDatabase update failed.\n";
+    return;
+}
                 rescueTeams[i].makeAvailable();
 
                 std::cout << "\nRescue team is now available.\n";
@@ -288,6 +395,13 @@ public:
         }
         std::cout << "Capacity: ";
         std::cin >> capacity;
+        double latitude, longitude;
+
+std::cout << "Latitude: ";
+std::cin >> latitude;
+
+std::cout << "Longitude: ";
+std::cin >> longitude;
         for (size_t i = 0; i < shelters.size(); i++)
         {
          if (shelters[i].getShelterID() == id)
@@ -296,6 +410,18 @@ public:
           return;
          }
         }
+        if (!db.insertShelter(
+        id,
+        location.c_str(),
+        location.c_str(),
+        latitude,
+        longitude,
+        capacity))
+{
+    std::cout << "\nDatabase insertion failed.\n";
+    return;
+}
+
         Shelter shelter(id, location, capacity);
 
         shelters.push_back(shelter);
@@ -330,7 +456,21 @@ public:
 
                 std::cout << "Enter new capacity: ";
                 std::cin >> capacity;
+                if (capacity < shelters[i].getOccupancy())
+{
+    std::cout << "\nCapacity cannot be less than occupancy.\n";
+    return;
+}
 
+if (!db.updateShelter(
+        id,
+        location.c_str(),
+        capacity,
+        shelters[i].getOccupancy()))
+{
+    std::cout << "\nDatabase update failed.\n";
+    return;
+}
                 shelters[i].updateShelter(location, capacity);
                 return;
             }
@@ -360,7 +500,25 @@ public:
                 std::cout << "Enter number of people: ";
                 std::cin >> people;
 
-                shelters[i].addPeople(people);
+                if (people <= 0 || !shelters[i].hasSpace(people))
+{
+    std::cout << "\nNot enough shelter space.\n";
+    return;
+}
+
+int newOccupancy = shelters[i].getOccupancy() + people;
+
+if (!db.updateShelter(
+        id,
+        shelters[i].getLocation().c_str(),
+        shelters[i].getCapacity(),
+        newOccupancy))
+{
+    std::cout << "\nDatabase update failed.\n";
+    return;
+}
+
+shelters[i].addPeople(people);
 
                 std::cout << "\nAvailable space: "
                           << shelters[i].getAvailableSpace() << "\n";
@@ -410,6 +568,41 @@ public:
          std::cout << "\nQuantity cannot be negative.\n";
          return;
         }
+        int shelterID;
+
+std::cout << "Shelter ID: ";
+std::cin >> shelterID;
+
+std::string dbName = name;
+
+if (name == "Food Packs")
+    dbName = "foodPacks";
+else if (name == "Water Liters")
+    dbName = "waterLiters";
+else if (name == "Medical Kits")
+    dbName = "medicalKits";
+else if (name == "Generator Power")
+    dbName = "generatorPower";
+else if (name == "Blankets")
+    dbName = "blankets";
+
+if (dbName != "foodPacks" &&
+    dbName != "waterLiters" &&
+    dbName != "medicalKits" &&
+    dbName != "generatorPower" &&
+    dbName != "blankets")
+{
+    std::cout << "\nInvalid resource name.\n";
+    return;
+}
+
+std::string sid = std::to_string(shelterID);
+
+if (!db.insertShelterResource(sid.c_str(), dbName.c_str(), quantity))
+{
+    std::cout << "\nDatabase insertion failed.\n";
+    return;
+}
         for (size_t i = 0; i < resources.size(); i++)
         {
          if (resources[i].getResourceID() == id)
@@ -418,6 +611,7 @@ public:
            return;
          }
         }
+
         Resource resource(id, name, quantity);
 
         resources.push_back(resource);
@@ -441,41 +635,81 @@ public:
     }
 
     void distributeResource()
+{
+    if (resources.empty())
     {
-        if (resources.empty())
-        {
-            std::cout << "\nNo resources available.\n";
-            return;
-        }
-
-        int id;
-        int amount;
-
-        std::cout << "\nEnter Resource ID: ";
-        std::cin >> id;
-
-        for (size_t i = 0; i < resources.size(); i++)
-        {
-            if (resources[i].getResourceID() == id)
-            {
-                std::cout << "Available quantity: "
-                          << resources[i].getQuantity() << "\n";
-
-                std::cout << "Enter quantity to distribute: ";
-                std::cin >> amount;
-
-                resources[i].distribute(amount);
-
-                std::cout << "\nRemaining quantity: "
-                          << resources[i].getQuantity() << "\n";
-
-                return;
-            }
-        }
-
-        std::cout << "\nResource ID not found.\n";
+        std::cout << "\nNo resources available.\n";
+        return;
     }
 
+    int id, amount, shelterID;
+
+    std::cout << "\nEnter Resource ID: ";
+    std::cin >> id;
+
+    for (size_t i = 0; i < resources.size(); i++)
+    {
+        if (resources[i].getResourceID() == id)
+        {
+            int available = resources[i].getQuantity();
+
+            std::cout << "Available quantity: " << available << "\n";
+            std::cout << "Enter quantity to distribute: ";
+            std::cin >> amount;
+
+            if (amount <= 0 || amount > available)
+            {
+                std::cout << "\nInvalid quantity.\n";
+                return;
+            }
+
+            std::cout << "Enter Shelter ID: ";
+            std::cin >> shelterID;
+
+            std::string name = resources[i].getResourceName();
+
+            if (name == "Food Packs")
+                name = "foodPacks";
+            else if (name == "Water Liters")
+                name = "waterLiters";
+            else if (name == "Medical Kits")
+                name = "medicalKits";
+            else if (name == "Generator Power")
+                name = "generatorPower";
+            else if (name != "foodPacks" &&
+                     name != "waterLiters" &&
+                     name != "medicalKits" &&
+                     name != "generatorPower" &&
+                     name != "blankets")
+            {
+                std::cout << "\nInvalid resource name.\n";
+                return;
+            }
+
+            double remaining = available - amount;
+            std::string sid = std::to_string(shelterID);
+
+            if (!db.updateShelterResource(
+                    sid.c_str(),
+                    name.c_str(),
+                    remaining))
+            {
+                std::cout << "\nDatabase update failed.\n";
+                return;
+            }
+
+            resources[i].distribute(amount);
+
+            std::cout << "\nResource distributed successfully.\n";
+            std::cout << "Remaining quantity: "
+                      << resources[i].getQuantity() << "\n";
+
+            return;
+        }
+    }
+
+    std::cout << "\nResource ID not found.\n";
+}
     void addRoad()
     {
         std::string from;
@@ -494,7 +728,17 @@ public:
 
         std::cout << "Distance (km): ";
         std::cin >> distance;
+        if (distance < 0 || from.empty() || to.empty() || from == to)
+{
+    std::cout << "\nInvalid road details.\n";
+    return;
+}
 
+if (!db.insertRoad(from.c_str(), to.c_str(), distance))
+{
+    std::cout << "\nDatabase insertion failed.\n";
+    return;
+}
         routeManager.addRoad(from, to, distance);
     }
 
@@ -554,6 +798,7 @@ public:
             std::cout << "\n0. Exit";
 
             std::cout << "\n\nEnter choice: ";
+
             if (!(std::cin >> choice))
             {
                std::cin.clear();
