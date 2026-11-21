@@ -67,4 +67,4 @@ public:
     }
 };
 
-#endif 
+#endif // RESCUETEAM_H
