@@ -1,0 +1,57 @@
+GARUDARESQ - LOCAL DEMO STARTUP
+
+WHAT IS CONNECTED
+- The existing React + TypeScript + Vite frontend is retained.
+- The Detailed Emergency Report form now sends its data to POST /api/emergencies.
+- Vite forwards /api requests to the C++ API at http://127.0.0.1:8080.
+- The C++ API uses the existing Database class to save victims and emergency_requests in PostgreSQL.
+
+IMPORTANT
+This is a local demonstration setup. It is not a public production deployment. Do not expose PostgreSQL credentials in frontend files. The frontend does not connect directly to PostgreSQL.
+
+REQUIREMENTS
+- Node.js and npm
+- Your existing C++ API executable/source and PostgreSQL setup
+- PostgreSQL database named garudaresq
+
+STARTUP ORDER
+1. Start PostgreSQL service.
+2. Open PowerShell in your C++ project root (the folder containing GarudaResQ_API.exe).
+3. Set the PostgreSQL password for this terminal only:
+   $env:PGPASSWORD="YOUR_POSTGRES_PASSWORD"
+4. Start the C++ API:
+   .\GarudaResQ_API.exe
+   Keep this terminal open. It should say the database is connected and the API is running on port 8080.
+5. Open a second PowerShell in this FRONTEND folder (the folder containing package.json).
+6. Install dependencies once:
+   npm install
+7. Start the frontend:
+   npm run dev
+8. Open the URL printed by Vite. This project is configured for:
+   http://localhost:3000
+
+TEST THE FULL FLOW
+1. Open the Citizen Portal and choose the detailed emergency reporting option.
+2. Enter phone number, landmark, category, affected people, severity and description.
+3. Submit the report.
+4. A success message appears only after the C++ API confirms the database insert.
+5. In pgAdmin, run:
+   SELECT * FROM emergency_requests ORDER BY reported_at DESC LIMIT 10;
+   SELECT * FROM victims ORDER BY victim_id DESC LIMIT 10;
+
+IF THE FRONTEND SAYS NETWORK ERROR
+- Confirm the C++ API terminal is still running.
+- In a new PowerShell run:
+  Test-NetConnection 127.0.0.1 -Port 8080
+- TcpTestSucceeded must be True.
+- Check that GET http://127.0.0.1:8080/api/health returns success.
+
+IF THE API RETURNS A DATABASE ERROR
+- Read the error in the C++ API terminal.
+- Confirm database garudaresq is running and your existing Database.cpp/Database.h match the schema.
+- The priority values sent are lowercase: critical, high, moderate.
+
+CURRENT INTEGRATION SCOPE
+- Detailed Emergency Report -> C++ REST API -> PostgreSQL is wired.
+- Other screens and their existing demonstration data are retained. Other forms/actions (SOS, shelter check-in, resource/team management) have not all been connected to database APIs yet.
+- The map and sample dashboard data may still include demo/simulated values. Do not present those as live database feeds unless separately verified.

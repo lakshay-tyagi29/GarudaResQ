@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* Leaflet dark theme customizations and pulse radar animations */
+.leaflet-container {
+  background-color: #030712 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Tactical dark theme filter for free OpenStreetMap (OSM) tiles */
+.leaflet-tile-pane .leaflet-tile {
+  filter: brightness(0.68) invert(1) contrast(1.45) hue-rotate(200deg) saturate(0.35) brightness(0.82);
+}
+
+/* Google Maps-style Blue Location Dot & Accuracy Circle */
+.gmaps-user-dot-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+}
+
+.gmaps-accuracy-circle {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.22);
+  border: 1.5px solid rgba(59, 130, 246, 0.6);
+  animation: gmaps-pulse 2s ease-out infinite;
+}
+
+@keyframes gmaps-pulse {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.95;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(2.0);
+    opacity: 0;
+  }
+}
+
+.gmaps-blue-dot {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2563eb;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.9), 0 2px 8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.gmaps-white-inner {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* Custom dark styling for Leaflet popups */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f1f5f9 !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(51, 65, 85, 0.7) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(51, 65, 85, 0.7) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px !important;
+  line-height: 1.5 !important;
+}
+
+/* Custom pulse radar animation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.radar-pulse {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Custom scrollbar for dark tech aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Tactical response markers & focus rings */
+.ngo-runner-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+}
+
+.ngo-pulse-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.4);
+  border: 2px solid #f59e0b;
+  animation: ngo-ring-pulse 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes ngo-ring-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+.ngo-core-marker {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2.5px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px #f59e0b, 0 0 28px #ef4444, 0 2px 10px rgba(0,0,0,0.85);
+  color: #030712;
+  z-index: 10;
+}
+
+.sos-focus-ring {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.3);
+  border: 2px solid #f87171;
+  animation: evac-ring-pulse 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes evac-ring-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
