@@ -66,4 +66,4 @@ struct ComparePriority
     }
 };
 
-#endif 
+#endif // EMERGENCYREQUEST_H
